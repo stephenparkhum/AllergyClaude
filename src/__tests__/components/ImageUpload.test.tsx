@@ -1,8 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ImageUpload from '@/components/ImageUpload';
-import * as imageUtils from '@/lib/utils/image';
+import * as imageUtils from '../../lib/utils/image';
 
-jest.mock('@/lib/utils/image');
+jest.mock('../../lib/utils/image');
 
 const mockImageUtils = imageUtils as jest.Mocked<typeof imageUtils>;
 
@@ -26,7 +26,7 @@ describe('ImageUpload', () => {
   it('should handle file selection', async () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
     
-    const fileInput = screen.getByRole('button', { name: /choose file/i }).previousElementSibling as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     
     fireEvent.change(fileInput, { target: { files: [file] } });
@@ -41,7 +41,7 @@ describe('ImageUpload', () => {
   it('should show success message after upload', async () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
     
-    const fileInput = screen.getByRole('button', { name: /choose file/i }).previousElementSibling as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     
     fireEvent.change(fileInput, { target: { files: [file] } });
@@ -58,7 +58,7 @@ describe('ImageUpload', () => {
     
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
     
-    const fileInput = screen.getByRole('button', { name: /choose file/i }).previousElementSibling as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.txt', { type: 'text/plain' });
     
     fireEvent.change(fileInput, { target: { files: [file] } });
@@ -75,7 +75,7 @@ describe('ImageUpload', () => {
     
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
     
-    const fileInput = screen.getByRole('button', { name: /choose file/i }).previousElementSibling as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     
     fireEvent.change(fileInput, { target: { files: [file] } });
@@ -108,12 +108,14 @@ describe('ImageUpload', () => {
   it('should handle drag over and drag leave events', () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
     
-    const dropZone = screen.getByText('Drag and drop or click to select').parentElement?.parentElement;
+    const dropZone = screen.getByRole('button', { name: /upload ingredient photo/i });
     
-    fireEvent.dragOver(dropZone!);
-    expect(dropZone).toHaveClass('border-primary');
+    fireEvent.dragOver(dropZone);
+    // Check the Card parent element for drag over styles
+    const cardElement = dropZone.closest('[data-testid="upload-area"]');
+    expect(cardElement).toHaveClass('border-blue-500');
     
-    fireEvent.dragLeave(dropZone!);
-    expect(dropZone).not.toHaveClass('border-primary');
+    fireEvent.dragLeave(dropZone);
+    expect(cardElement).not.toHaveClass('border-blue-500');
   });
 });

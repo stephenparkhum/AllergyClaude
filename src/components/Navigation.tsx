@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, Button, Typography, useTheme, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
+import { Button, useTheme, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { HelpCircle } from "lucide-react";
 import Link from "next/link";
@@ -19,48 +19,44 @@ export default function Navigation() {
 
   return (
     <>
-      <Card className="mb-8 shadow-lg" data-testid="navigation">
-        <CardContent className="p-6">
+      <nav className="border-b border-opacity-10 mb-8" style={{ borderColor: 'var(--border)' }} data-testid="navigation">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           {isMobile ? (
             // Mobile Layout
             <div className="flex flex-col">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-4">
                 <div className="flex-1" />
                 <IconButton
                   onClick={() => setMobileMenuOpen(true)}
                   aria-label="Open menu"
                   data-testid="mobile-menu-button"
+                  sx={{ color: 'var(--foreground)' }}
                 >
                   <MenuIcon />
                 </IconButton>
               </div>
               <div className="text-center">
                 <Link href="/" className="block">
-                  <Typography
-                    variant="h4"
-                    component="h1"
-                    className="font-playfair"
+                  <h1 
+                    className="text-2xl font-semibold tracking-tight"
                     data-testid="nav-title"
-                    sx={{
-                      fontWeight: 'bold',
-                      color: theme.palette.text.primary,
+                    style={{ 
+                      color: 'var(--foreground)',
                       transition: 'color 0.2s ease',
-                      '&:hover': {
-                        color: theme.palette.primary.main,
-                      },
                     }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--foreground)'}
                   >
-                    {siteData.name.toUpperCase()}
-                  </Typography>
+                    {siteData.name}
+                  </h1>
                 </Link>
-                <Typography
-                  variant="body2"
-                  className="font-source-sans-pro mt-1"
+                <p
+                  className="text-sm mt-2"
                   data-testid="nav-description"
-                  color="text.secondary"
+                  style={{ color: 'var(--muted)' }}
                 >
                   {isHomePage ? siteData.tagline : "AI-powered food allergy detection"}
-                </Typography>
+                </p>
               </div>
             </div>
           ) : (
@@ -68,41 +64,47 @@ export default function Navigation() {
             <div className="flex justify-between items-center">
               <div>
                 <Link href="/" className="block">
-                  <Typography
-                    variant="h3"
-                    component="h1"
-                    className="font-playfair"
+                  <h1 
+                    className="text-3xl font-semibold tracking-tight"
                     data-testid="nav-title"
-                    sx={{
-                      fontWeight: 'bold',
-                      color: theme.palette.text.primary,
+                    style={{ 
+                      color: 'var(--foreground)',
                       transition: 'color 0.2s ease',
-                      '&:hover': {
-                        color: theme.palette.primary.main,
-                      },
                     }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--foreground)'}
                   >
-                    {siteData.name.toUpperCase()}
-                  </Typography>
+                    {siteData.name}
+                  </h1>
                 </Link>
-                <Typography
-                  variant="body2"
-                  className="font-source-sans-pro mt-2"
+                <p
+                  className="text-sm mt-1"
                   data-testid="nav-description"
-                  color="text.secondary"
+                  style={{ color: 'var(--muted)' }}
                 >
                   {isHomePage ? siteData.tagline : "AI-powered food allergy detection"}
-                </Typography>
+                </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 {isHomePage ? (
                   <Link href="/how-to">
                     <Button
                       variant="outlined"
                       startIcon={<HelpCircle className="h-4 w-4" />}
-                      className="font-source-sans-pro"
                       data-testid="how-to-nav-button"
                       aria-label="Learn how to use Allergy Agents"
+                      sx={{
+                        borderColor: 'var(--border)',
+                        color: 'var(--foreground)',
+                        borderRadius: 'calc(var(--radius) - 2px)',
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        '&:hover': {
+                          borderColor: 'var(--accent)',
+                          backgroundColor: 'transparent',
+                          color: 'var(--accent)',
+                        },
+                      }}
                     >
                       How to Use
                     </Button>
@@ -111,9 +113,20 @@ export default function Navigation() {
                   <Link href="/">
                     <Button
                       variant="outlined"
-                      className="font-source-sans-pro"
                       data-testid="home-nav-button"
                       aria-label="Go back to main dashboard"
+                      sx={{
+                        borderColor: 'var(--border)',
+                        color: 'var(--foreground)',
+                        borderRadius: 'calc(var(--radius) - 2px)',
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        '&:hover': {
+                          borderColor: 'var(--accent)',
+                          backgroundColor: 'transparent',
+                          color: 'var(--accent)',
+                        },
+                      }}
                     >
                       Back to Dashboard
                     </Button>
@@ -125,8 +138,8 @@ export default function Navigation() {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </nav>
 
       {/* Mobile Menu Drawer */}
       <Drawer

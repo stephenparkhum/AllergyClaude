@@ -6,12 +6,12 @@ export const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#0E2148',
+      main: '#4F6F8C',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#E3D095',
-      contrastText: '#0E2148',
+      main: '#BBD8F2',
+      contrastText: '#000000',
     },
     background: {
       default: '#ffffff',
@@ -55,12 +55,12 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#4A90E2', // Lighter blue for better contrast in dark mode
+      main: '#4F6F8C',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#E3D095',
-      contrastText: '#0E2148',
+      main: '#BBD8F2',
+      contrastText: '#000000',
     },
     background: {
       default: '#0a0a0a',

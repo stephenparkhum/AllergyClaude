@@ -17,7 +17,12 @@ export const siteData = {
   // Legal information
   legal: {
     company: "Allergy Agents Inc.",
-    copyright: "© 2024 Allergy Agents. This tool is for informational purposes only and should not replace professional medical advice.",
+    get copyright() {
+      const currentYear = new Date().getFullYear();
+      const foundedYear = parseInt(siteData.founded);
+      const yearRange = currentYear > foundedYear ? `${foundedYear}-${currentYear}` : `${currentYear}`;
+      return `© ${yearRange} Allergy Agents. This tool is for informational purposes only and should not replace professional medical advice.`;
+    },
   },
   
   // Contact information
@@ -42,6 +47,40 @@ export const siteData = {
     offlineMode: false,
     multipleAllergies: true,
   }
-} as const;
+};
 
-export type SiteData = typeof siteData;
+export type SiteData = {
+  name: string;
+  tagline: string;
+  description: string;
+  email: string;
+  supportEmail: string;
+  website: string;
+  version: string;
+  founded: string;
+  social: {
+    twitter: string;
+    github: string;
+  };
+  legal: {
+    company: string;
+    copyright: string;
+  };
+  contact: {
+    general: string;
+    support: string;
+    emergency: string;
+  };
+  app: {
+    maxImageSize: string;
+    supportedFormats: string[];
+    analysisTimeout: number;
+    storageKey: string;
+  };
+  features: {
+    darkMode: boolean;
+    imageUpload: boolean;
+    offlineMode: boolean;
+    multipleAllergies: boolean;
+  };
+};

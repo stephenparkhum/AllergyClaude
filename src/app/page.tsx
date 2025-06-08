@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, Button, TextField, CircularProgress } from "@mui/material";
-import { ImageIcon, Shield, AlertTriangle, Info, Eye } from "lucide-react";
+import { Button, TextField, CircularProgress } from "@mui/material";
+import { Shield, Eye } from "lucide-react";
 import Image from "next/image";
 import ImageUpload from "@/components/ImageUpload";
 import AllergyResults from "@/components/AllergyResults";
@@ -79,126 +79,157 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
       <Navigation />
 
-      {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-        
-        {/* Allergies Widget */}
-        <Card className="lg:col-span-1 xl:col-span-2 shadow-lg hover:shadow-xl transition-shadow duration-300" data-testid="allergies-card">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg" aria-hidden="true">
-                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
-              </div>
-              <h2 className="text-xl font-semibold font-playfair" id="allergies-heading">YOUR ALLERGIES</h2>
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          
+          {/* Left Column - Input */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Allergies Section */}
+            <div className="minimal-card p-6" data-testid="allergies-card">
+              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="allergies-heading">
+                Your Allergies
+              </h2>
+              <TextField
+                label="Known allergies"
+                placeholder="peanuts, shellfish, dairy, gluten..."
+                value={allergies}
+                onChange={(e) => setAllergies(e.target.value)}
+                multiline
+                rows={4}
+                fullWidth
+                variant="outlined"
+                className="minimal-input"
+                data-testid="allergies-input"
+                aria-labelledby="allergies-heading"
+                aria-describedby="allergies-description"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: 'var(--surface)',
+                    borderRadius: 'calc(var(--radius) - 4px)',
+                    '& fieldset': {
+                      borderColor: 'var(--border)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--accent)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--accent)',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: 'var(--muted)',
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--foreground)',
+                  },
+                }}
+              />
+              <p id="allergies-description" className="text-sm mt-3" style={{ color: 'var(--muted)' }}>
+                List allergies separated by commas for accurate analysis
+              </p>
             </div>
-            <TextField
-              label="List your known allergies"
-              placeholder="Enter your allergies (e.g., peanuts, shellfish, dairy, gluten)..."
-              value={allergies}
-              onChange={(e) => setAllergies(e.target.value)}
-              multiline
-              rows={4}
-              fullWidth
-              className="mb-4 font-source-sans-pro"
-              data-testid="allergies-input"
-              aria-labelledby="allergies-heading"
-              aria-describedby="allergies-description"
-            />
-            <div id="allergies-description" className="text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro">
-              List all known allergies separated by commas. This information helps our AI analyze food safety.
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Image Upload Widget */}
-        <Card className="lg:col-span-1 shadow-lg hover:shadow-xl transition-shadow duration-300" data-testid="upload-card">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg" aria-hidden="true">
-                <ImageIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h2 className="text-xl font-semibold font-playfair" id="upload-heading">UPLOAD PHOTO</h2>
+            {/* Upload Section */}
+            <div className="minimal-card p-6" data-testid="upload-card">
+              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="upload-heading">
+                Food Label Photo
+              </h2>
+              <ImageUpload onImageUpload={handleImageUpload} />
             </div>
-            <ImageUpload onImageUpload={handleImageUpload} />
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Image Preview Widget */}
-        <Card className="lg:col-span-1 xl:col-span-2 shadow-lg hover:shadow-xl transition-shadow duration-300" data-testid="preview-card">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg" aria-hidden="true">
-                <Eye className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          {/* Right Column - Preview & Analysis */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Image Preview */}
+            <div className="minimal-card p-6" data-testid="preview-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold" style={{ color: 'var(--foreground)' }} id="preview-heading">
+                  Preview
+                </h2>
+                <Button
+                  variant="contained"
+                  onClick={analyzeIngredients}
+                  disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
+                  className="minimal-button"
+                  data-testid="analyze-button"
+                  aria-label={isAnalyzing ? "Analyzing ingredients, please wait" : "Analyze ingredients for allergens"}
+                  sx={{
+                    backgroundColor: 'var(--accent)',
+                    color: 'white',
+                    borderRadius: 'calc(var(--radius) - 2px)',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    boxShadow: 'none',
+                    '&:hover': {
+                      backgroundColor: 'var(--accent)',
+                      opacity: 0.9,
+                      boxShadow: 'none',
+                    },
+                    '&:disabled': {
+                      backgroundColor: 'var(--muted)',
+                      color: 'white',
+                    },
+                  }}
+                >
+                  {isAnalyzing ? "Analyzing..." : "Analyze"}
+                </Button>
               </div>
-              <h2 className="text-xl font-semibold font-playfair" id="preview-heading">PREVIEW</h2>
-            </div>
-            {uploadedImage ? (
-              <div className="relative w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border" data-testid="image-preview">
-                <Image
-                  src={uploadedImage}
-                  alt="Uploaded ingredient photo for allergy analysis"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ) : (
-              <div className="w-full h-48 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center" role="img" aria-label="No image uploaded">
-                <div className="text-center text-gray-500 dark:text-gray-400">
-                  <Eye className="h-8 w-8 mx-auto mb-2 opacity-50" aria-hidden="true" />
-                  <p className="text-sm font-source-sans-pro">Upload an image to preview</p>
+              
+              {uploadedImage ? (
+                <div className="relative w-full h-64 rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--background)' }} data-testid="image-preview">
+                  <Image
+                    src={uploadedImage}
+                    alt="Uploaded ingredient photo for allergy analysis"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Results Widget */}
-        <Card className="lg:col-span-4 xl:col-span-4 shadow-lg hover:shadow-xl transition-shadow duration-300" data-testid="results-card">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg" aria-hidden="true">
-                  <Info className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+              ) : (
+                <div 
+                  className="w-full h-64 rounded-lg flex items-center justify-center" 
+                  style={{ backgroundColor: 'var(--background)', border: '1px dashed var(--border)' }}
+                  role="img" 
+                  aria-label="No image uploaded"
+                >
+                  <div className="text-center">
+                    <Eye className="h-12 w-12 mx-auto mb-3 opacity-30" style={{ color: 'var(--muted)' }} aria-hidden="true" />
+                    <p className="text-sm" style={{ color: 'var(--muted)' }}>Upload an image to preview</p>
+                  </div>
                 </div>
-                <h2 className="text-xl font-semibold font-playfair" id="results-heading">SAFETY RESULTS</h2>
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                onClick={analyzeIngredients}
-                disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
-                className="w-full sm:w-auto font-source-sans-pro"
-                data-testid="analyze-button"
-                aria-label={isAnalyzing ? "Analyzing ingredients, please wait" : "Analyze ingredients for allergens"}
-              >
-                {isAnalyzing ? "Analyzing..." : "Analyze Ingredients"}
-              </Button>
+              )}
             </div>
-            {isAnalyzing ? (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400 font-source-sans-pro" role="status" aria-label="Analyzing ingredients" data-testid="loading-state">
-                <CircularProgress size={64} className="mb-4" color="primary" />
-                <p className="text-lg">Detecting allergens...</p>
-                <p className="text-sm mt-2">Please wait while we analyze your food ingredients</p>
-              </div>
-            ) : results ? (
-              <div role="region" aria-labelledby="results-heading" aria-live="polite" data-testid="results-content">
-                <AllergyResults results={results} />
-              </div>
-            ) : (
-              <div className="text-center py-12 text-gray-500 dark:text-gray-400 font-source-sans-pro" role="status" aria-label="No results available">
-                <Shield className="h-16 w-16 mx-auto mb-4 opacity-50" aria-hidden="true" />
-                <p className="text-lg">Upload an image and analyze to see results</p>
-                <p className="text-sm mt-2">Your food safety information will appear here</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
 
-      </div>
+            {/* Results Section */}
+            <div className="minimal-card p-6" data-testid="results-card">
+              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="results-heading">
+                Safety Analysis
+              </h2>
+              
+              {isAnalyzing ? (
+                <div className="text-center py-12" role="status" aria-label="Analyzing ingredients" data-testid="loading-state">
+                  <CircularProgress size={48} sx={{ color: 'var(--accent)', mb: 3 }} />
+                  <p className="text-lg mb-2" style={{ color: 'var(--foreground)' }}>Analyzing ingredients...</p>
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>This may take a moment</p>
+                </div>
+              ) : results ? (
+                <div role="region" aria-labelledby="results-heading" aria-live="polite" data-testid="results-content">
+                  <AllergyResults results={results} />
+                </div>
+              ) : (
+                <div className="text-center py-12" role="status" aria-label="No results available">
+                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-20" style={{ color: 'var(--muted)' }} aria-hidden="true" />
+                  <p className="text-lg mb-2" style={{ color: 'var(--muted)' }}>Upload an image to begin analysis</p>
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>Your safety results will appear here</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
       
       <Footer />
     </div>

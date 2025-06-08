@@ -1,322 +1,318 @@
 "use client";
 
-import { Card, CardContent, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { CheckCircle, XCircle, AlertTriangle, Camera, FileImage, Eye, Shield } from "lucide-react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { siteData } from "@/lib/siteData";
 
 export default function HowToPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
       <Navigation />
+      
+      <main className="max-w-5xl mx-auto px-6 py-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-semibold mb-6" style={{ color: 'var(--foreground)' }} data-testid="how-to-title">
+            How to Use {siteData.name}
+          </h1>
+          <p className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed" style={{ color: 'var(--muted)' }} data-testid="how-to-subtitle">
+            Learn how to quickly and safely analyze food ingredients for allergens using our AI-powered tool.
+          </p>
+        </div>
 
-      <div className="max-w-4xl mx-auto space-y-8">
-        
+        {/* Important Notice */}
+        <div 
+          className="minimal-card p-6 mb-12"
+          data-testid="safety-notice"
+          style={{ 
+            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+            borderColor: 'rgba(255, 193, 7, 0.3)'
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 mt-0.5" style={{ color: '#ff9800' }} />
+            <div>
+              <h3 className="font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
+                Important Safety Notice
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                This tool is designed to assist with ingredient analysis but should NEVER be your only method of checking food safety. 
+                Always read ingredient labels carefully yourself and consult healthcare providers for medical advice.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Step-by-Step Guide */}
-        <Card className="shadow-lg" data-testid="step-guide-card">
-          <CardContent className="p-8">
-            <h2 className="text-2xl font-bold font-playfair mb-6 text-gray-900 dark:text-white">
-              STEP-BY-STEP GUIDE
-            </h2>
-            
-            <div className="space-y-8">
-              {/* Step 1 */}
-              <div className="flex gap-6" data-testid="step-1">
-                <div className="flex-shrink-0 w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-bold text-red-600 dark:text-red-400 font-playfair">1</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                    LIST YOUR ALLERGIES
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 font-source-sans-pro mb-3">
-                    Enter all your known allergies in the text area. Be specific and include all forms (e.g., &quot;milk, dairy, lactose&quot;).
+        <div className="minimal-card p-8 mb-12" data-testid="step-guide-card">
+          <h2 className="text-2xl font-semibold mb-8" style={{ color: 'var(--foreground)' }}>
+            Step-by-Step Guide
+          </h2>
+          
+          <div className="space-y-12">
+            {/* Step 1 */}
+            <div className="flex gap-6" data-testid="step-1">
+              <div 
+                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
+              >
+                <span className="text-xl font-semibold">1</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                  List Your Allergies
+                </h3>
+                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  Enter all your known allergies in the text area. Be specific and include all forms (e.g., "milk, dairy, lactose").
+                </p>
+                <div 
+                  className="rounded-lg p-4"
+                  style={{ backgroundColor: 'var(--background)', border: '1px solid var(--border)' }}
+                >
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>
+                    <strong>Example:</strong> "peanuts, tree nuts, shellfish, dairy, eggs, soy"
                   </p>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <p className="text-sm font-source-sans-pro text-gray-700 dark:text-gray-300">
-                      <strong>Example:</strong> &quot;peanuts, tree nuts, shellfish, dairy, eggs, soy&quot;
-                    </p>
-                  </div>
                 </div>
               </div>
+            </div>
 
-              {/* Step 2 */}
-              <div className="flex gap-6" data-testid="step-2">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400 font-playfair">2</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                    TAKE A CLEAR PHOTO
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 font-source-sans-pro mb-3">
-                    Photograph the ingredient list on the food package. Ensure the text is clear and readable.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <CheckCircle className="h-5 w-5 text-green-600" />
-                        <span className="font-semibold text-green-800 dark:text-green-200 font-playfair">GOOD PHOTOS</span>
-                      </div>
-                      <ul className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro space-y-1">
-                        <li>• Clear, focused ingredient list</li>
-                        <li>• Good lighting</li>
-                        <li>• Text is readable</li>
-                        <li>• Full ingredients panel visible</li>
-                      </ul>
-                    </div>
-                    <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <XCircle className="h-5 w-5 text-red-600" />
-                        <span className="font-semibold text-red-800 dark:text-red-200 font-playfair">AVOID</span>
-                      </div>
-                      <ul className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro space-y-1">
-                        <li>• Blurry or out-of-focus images</li>
-                        <li>• Poor lighting/shadows</li>
-                        <li>• Partial ingredient lists</li>
-                        <li>• Reflective surfaces/glare</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+            {/* Step 2 */}
+            <div className="flex gap-6" data-testid="step-2">
+              <div 
+                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
+              >
+                <span className="text-xl font-semibold">2</span>
               </div>
-
-              {/* Step 3 */}
-              <div className="flex gap-6" data-testid="step-3">
-                <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-bold text-green-600 dark:text-green-400 font-playfair">3</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                    UPLOAD AND ANALYZE
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 font-source-sans-pro mb-3">
-                    Upload your photo and click "Analyze Ingredients" to get instant allergy detection results.
-                  </p>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <p className="text-sm font-source-sans-pro text-gray-700 dark:text-gray-300">
-                      The AI will scan the ingredients and cross-reference them with your allergies, including hidden allergens and "&quot;may contain&quot;" warnings.
-                    </p>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                  Take a Clear Photo
+                </h3>
+                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  Photograph the ingredient list on the food package. Ensure the text is clear and readable.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div 
+                    className="rounded-lg p-4"
+                    style={{ 
+                      backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                      border: '1px solid rgba(76, 175, 80, 0.3)'
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <CheckCircle className="h-5 w-5" style={{ color: '#4caf50' }} />
+                      <span className="font-semibold" style={{ color: '#2e7d32' }}>Good Photos</span>
+                    </div>
+                    <ul className="text-sm space-y-1" style={{ color: '#388e3c' }}>
+                      <li>• Clear, focused ingredient list</li>
+                      <li>• Good lighting</li>
+                      <li>• Text is readable</li>
+                      <li>• Full ingredients panel visible</li>
+                    </ul>
+                  </div>
+                  <div 
+                    className="rounded-lg p-4"
+                    style={{ 
+                      backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                      border: '1px solid rgba(244, 67, 54, 0.3)'
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <XCircle className="h-5 w-5" style={{ color: '#f44336' }} />
+                      <span className="font-semibold" style={{ color: '#c62828' }}>Avoid</span>
+                    </div>
+                    <ul className="text-sm space-y-1" style={{ color: '#d32f2f' }}>
+                      <li>• Blurry or out-of-focus images</li>
+                      <li>• Poor lighting/shadows</li>
+                      <li>• Partial ingredient lists</li>
+                      <li>• Reflective surfaces/glare</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Step 3 */}
+            <div className="flex gap-6" data-testid="step-3">
+              <div 
+                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
+              >
+                <span className="text-xl font-semibold">3</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                  Upload and Analyze
+                </h3>
+                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
+                  Upload your photo and click "Analyze" to get instant allergy detection results.
+                </p>
+                <div 
+                  className="rounded-lg p-4"
+                  style={{ backgroundColor: 'var(--background)', border: '1px solid var(--border)' }}
+                >
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>
+                    The AI will scan the ingredients and cross-reference them with your allergies, including hidden allergens and "may contain" warnings.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Good Use Cases */}
-        <Card className="shadow-lg" data-testid="good-use-cases-card">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <CheckCircle className="h-8 w-8 text-green-600" />
-              <h2 className="text-2xl font-bold font-playfair text-gray-900 dark:text-white">
-                RECOMMENDED USE CASES
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ PACKAGED FOODS
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Snacks, cereals, canned goods, frozen meals with clear ingredient labels
-                  </p>
-                </div>
-
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ INGREDIENT VERIFICATION
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Double-checking ingredient lists for hidden allergens or alternative names
-                  </p>
-                </div>
-
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ NEW PRODUCTS
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Trying new foods or brands when you're unsure about their safety
-                  </p>
-                </div>
+        <div className="minimal-card p-8 mb-12" data-testid="good-use-cases-card">
+          <div className="flex items-center gap-3 mb-8">
+            <CheckCircle className="h-6 w-6" style={{ color: '#4caf50' }} />
+            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+              Recommended Use Cases
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: "Packaged Foods", desc: "Snacks, cereals, canned goods, frozen meals with clear ingredient labels" },
+              { title: "Ingredient Verification", desc: "Double-checking ingredient lists for hidden allergens or alternative names" },
+              { title: "New Products", desc: "Trying new foods or brands when you're unsure about their safety" },
+              { title: "Travel & Shopping", desc: "Quick checks while grocery shopping or when traveling abroad" },
+              { title: "Education", desc: "Learning about hidden allergens and alternative ingredient names" },
+              { title: "Family Safety", desc: "Helping family members or caregivers check food safety" }
+            ].map((item, index) => (
+              <div 
+                key={index}
+                className="rounded-lg p-4"
+                style={{ 
+                  backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                  border: '1px solid rgba(76, 175, 80, 0.2)'
+                }}
+              >
+                <h3 className="font-semibold mb-2" style={{ color: '#2e7d32' }}>
+                  ✓ {item.title}
+                </h3>
+                <p className="text-sm" style={{ color: '#388e3c' }}>
+                  {item.desc}
+                </p>
               </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="space-y-4">
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ TRAVEL & SHOPPING
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Quick checks while grocery shopping or when traveling abroad
-                  </p>
-                </div>
-
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ EDUCATION
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Learning about hidden allergens and alternative ingredient names
-                  </p>
-                </div>
-
-                <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 dark:text-green-200 font-playfair mb-2">
-                    ✓ FAMILY SAFETY
-                  </h3>
-                  <p className="text-sm text-green-700 dark:text-green-300 font-source-sans-pro">
-                    Helping family members or caregivers check food safety
-                  </p>
-                </div>
+        {/* Important Limitations */}
+        <div className="minimal-card p-8 mb-12" data-testid="avoid-use-cases-card">
+          <div className="flex items-center gap-3 mb-8">
+            <AlertTriangle className="h-6 w-6" style={{ color: '#f44336' }} />
+            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+              Important Limitations
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { title: "Emergency Situations", desc: "Never rely solely on this app during allergic reactions. Seek immediate medical help." },
+              { title: "Restaurant Meals", desc: "Cannot analyze prepared foods, restaurant dishes, or foods without ingredient labels" },
+              { title: "Severe Allergies", desc: "Always verify ingredients manually if you have life-threatening allergies" },
+              { title: "Cross-Contamination", desc: "Cannot detect facility cross-contamination beyond what's listed on labels" },
+              { title: "Unclear Images", desc: "Results may be inaccurate with blurry, partial, or poor-quality images" },
+              { title: "Sole Decision Making", desc: "Always double-check results and consult healthcare providers for medical advice" }
+            ].map((item, index) => (
+              <div 
+                key={index}
+                className="rounded-lg p-4"
+                style={{ 
+                  backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                  border: '1px solid rgba(244, 67, 54, 0.2)'
+                }}
+              >
+                <h3 className="font-semibold mb-2" style={{ color: '#c62828' }}>
+                  ⚠️ {item.title}
+                </h3>
+                <p className="text-sm" style={{ color: '#d32f2f' }}>
+                  {item.desc}
+                </p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* What NOT to Use For */}
-        <Card className="shadow-lg" data-testid="avoid-use-cases-card">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-              <h2 className="text-2xl font-bold font-playfair text-gray-900 dark:text-white">
-                IMPORTANT LIMITATIONS
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ EMERGENCY SITUATIONS
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Never rely solely on this app during allergic reactions. Seek immediate medical help.
-                  </p>
-                </div>
-
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ RESTAURANT MEALS
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Cannot analyze prepared foods, restaurant dishes, or foods without ingredient labels
-                  </p>
-                </div>
-
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ SEVERE ALLERGIES
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Always verify ingredients manually if you have life-threatening allergies
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ CROSS-CONTAMINATION
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Cannot detect facility cross-contamination beyond what's listed on labels
-                  </p>
-                </div>
-
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ UNCLEAR IMAGES
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Results may be inaccurate with blurry, partial, or poor-quality images
-                  </p>
-                </div>
-
-                <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                  <h3 className="font-semibold text-red-800 dark:text-red-200 font-playfair mb-2">
-                    ⚠️ SOLE DECISION MAKING
-                  </h3>
-                  <p className="text-sm text-red-700 dark:text-red-300 font-source-sans-pro">
-                    Always double-check results and consult healthcare providers for medical advice
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            ))}
+          </div>
+        </div>
 
         {/* Tips for Best Results */}
-        <Card className="shadow-lg" data-testid="tips-card">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Shield className="h-8 w-8 text-blue-600" />
-              <h2 className="text-2xl font-bold font-playfair text-gray-900 dark:text-white">
-                TIPS FOR BEST RESULTS
-              </h2>
+        <div className="minimal-card p-8 mb-12" data-testid="tips-card">
+          <div className="flex items-center gap-3 mb-8">
+            <Shield className="h-6 w-6" style={{ color: 'var(--accent)' }} />
+            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+              Tips for Best Results
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <Camera className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                Photo Quality
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                Use good lighting and ensure ingredients text is clear and in focus
+              </p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <Camera className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                  PHOTO QUALITY
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro">
-                  Use good lighting and ensure ingredients text is clear and in focus
-                </p>
-              </div>
 
-              <div className="text-center">
-                <FileImage className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                  COMPLETE LABELS
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro">
-                  Capture the entire ingredient list including "&quot;may contain&quot;" warnings
-                </p>
-              </div>
-
-              <div className="text-center">
-                <Eye className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <h3 className="font-semibold font-playfair text-gray-900 dark:text-white mb-2">
-                  VERIFY RESULTS
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro">
-                  Always double-check the analysis with your own reading of the label
-                </p>
-              </div>
+            <div className="text-center">
+              <FileImage className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                Complete Labels
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                Capture the entire ingredient list including "may contain" warnings
+              </p>
             </div>
-          </CardContent>
-        </Card>
+
+            <div className="text-center">
+              <Eye className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
+              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
+                Verify Results
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                Always double-check the analysis with your own reading of the label
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Call to Action */}
-        <Card className="shadow-lg" data-testid="cta-card">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-2xl font-bold font-playfair text-gray-900 dark:text-white mb-4">
-              READY TO GET STARTED?
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 font-source-sans-pro mb-6 max-w-2xl mx-auto">
-              Now that you know how to use Allergy Agents safely and effectively, head back to the main page to start analyzing your food for allergens.
-            </p>
-            <Link href="/">
-              <Button 
-                variant="contained"
-                color="primary" 
-                size="large" 
-                className="font-source-sans-pro"
-                data-testid="start-analyzing-button"
-              >
-                Start Analyzing Food
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-      </div>
+        <div className="minimal-card p-8 text-center" data-testid="cta-card">
+          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
+            Ready to Get Started?
+          </h2>
+          <p className="mb-6 max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--muted)' }}>
+            Now that you know how to use {siteData.name} safely and effectively, head back to the main page to start analyzing your food for allergens.
+          </p>
+          <Link href="/">
+            <Button 
+              variant="contained"
+              size="large"
+              data-testid="start-analyzing-button"
+              sx={{
+                backgroundColor: 'var(--accent)',
+                color: 'white',
+                borderRadius: 'calc(var(--radius) - 2px)',
+                fontWeight: 500,
+                textTransform: 'none',
+                boxShadow: 'none',
+                px: 4,
+                py: 1.5,
+                '&:hover': {
+                  backgroundColor: 'var(--accent)',
+                  opacity: 0.9,
+                  boxShadow: 'none',
+                },
+              }}
+            >
+              Start Analyzing Food
+            </Button>
+          </Link>
+        </div>
+      </main>
       
       <Footer />
     </div>

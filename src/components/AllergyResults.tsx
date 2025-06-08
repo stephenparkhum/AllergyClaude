@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, Chip, Alert } from "@mui/material";
+import { Card, CardContent, Chip } from "@mui/material";
 import { CheckCircle, XCircle, AlertTriangle, List, ThumbsUp, ThumbsDown } from "lucide-react";
 
 interface AllergyResult {
@@ -26,16 +26,6 @@ export default function AllergyResults({ results }: AllergyResultsProps) {
 
   return (
     <div className="space-y-6" data-testid="allergy-results">
-      {/* Warning Alert for potential allergens */}
-      {isWarningState && (
-        <Alert 
-          severity="warning" 
-          className="font-source-sans-pro"
-          data-testid="warning-alert"
-        >
-          <strong>CAUTION:</strong> This food contains ingredients that might be related to your allergies. Please verify carefully before consuming.
-        </Alert>
-      )}
 
       <Card className={`border-2 shadow-lg ${
         hasDefiniteAllergens 

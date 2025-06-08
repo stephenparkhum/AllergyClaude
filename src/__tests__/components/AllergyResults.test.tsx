@@ -4,6 +4,10 @@ import AllergyResults from '@/components/AllergyResults';
 const mockSafeResults = {
   safe: true,
   detected_allergens: [],
+  potential_allergens: [],
+  safe_ingredients: ['wheat', 'water', 'salt'],
+  warning_ingredients: [],
+  unsafe_ingredients: [],
   ingredients: ['wheat', 'water', 'salt'],
   analysis: 'This product appears safe for consumption.',
 };
@@ -11,6 +15,10 @@ const mockSafeResults = {
 const mockUnsafeResults = {
   safe: false,
   detected_allergens: ['peanuts', 'dairy'],
+  potential_allergens: [],
+  safe_ingredients: ['wheat', 'salt'],
+  warning_ingredients: [],
+  unsafe_ingredients: ['peanuts', 'milk'],
   ingredients: ['wheat', 'peanuts', 'milk', 'salt'],
   analysis: 'This product contains allergens that match your allergies.',
 };
@@ -32,7 +40,7 @@ describe('AllergyResults', () => {
     render(<AllergyResults results={mockUnsafeResults} />);
     
     expect(screen.getByText('DETECTED ALLERGENS:')).toBeInTheDocument();
-    expect(screen.getByText('peanuts')).toBeInTheDocument();
+    expect(screen.getAllByText('peanuts')).toHaveLength(2); // Appears in detected_allergens and ingredients
     expect(screen.getByText('dairy')).toBeInTheDocument();
   });
 
@@ -54,7 +62,7 @@ describe('AllergyResults', () => {
   it('should display analysis when provided', () => {
     render(<AllergyResults results={mockSafeResults} />);
     
-    expect(screen.getByText('ANALYSIS:')).toBeInTheDocument();
+    expect(screen.getByText('DETAILED ANALYSIS:')).toBeInTheDocument();
     expect(screen.getByText('This product appears safe for consumption.')).toBeInTheDocument();
   });
 
@@ -62,6 +70,9 @@ describe('AllergyResults', () => {
     const resultsWithoutIngredients = {
       ...mockSafeResults,
       ingredients: [],
+      safe_ingredients: [],
+      warning_ingredients: [],
+      unsafe_ingredients: [],
     };
     
     render(<AllergyResults results={resultsWithoutIngredients} />);
@@ -77,6 +88,6 @@ describe('AllergyResults', () => {
     
     render(<AllergyResults results={resultsWithoutAnalysis} />);
     
-    expect(screen.queryByText('ANALYSIS:')).not.toBeInTheDocument();
+    expect(screen.queryByText('DETAILED ANALYSIS:')).not.toBeInTheDocument();
   });
 });

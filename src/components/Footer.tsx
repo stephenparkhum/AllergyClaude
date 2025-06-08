@@ -11,31 +11,37 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 mt-12" data-testid="footer">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <footer className="border-t mt-20" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--background)' }} data-testid="footer">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             
             {/* About Section */}
             <div>
-              <h3 className="text-lg font-semibold font-playfair text-gray-900 dark:text-white mb-4">
-                {siteData.name.toUpperCase()}
+              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
+                {siteData.name}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro leading-relaxed">
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
                 {siteData.description}
               </p>
             </div>
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-semibold font-playfair text-gray-900 dark:text-white mb-4">
-                QUICK LINKS
+              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
+                Quick Links
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 <li>
                   <Link 
                     href="/" 
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-source-sans-pro transition-colors"
+                    className="text-sm transition-colors"
                     data-testid="footer-home-link"
+                    style={{ 
+                      color: 'var(--muted)',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted)'}
                   >
                     Home
                   </Link>
@@ -43,8 +49,14 @@ export default function Footer() {
                 <li>
                   <Link 
                     href="/how-to" 
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-source-sans-pro transition-colors"
+                    className="text-sm transition-colors"
                     data-testid="footer-howto-link"
+                    style={{ 
+                      color: 'var(--muted)',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted)'}
                   >
                     How to Use
                   </Link>
@@ -54,21 +66,27 @@ export default function Footer() {
 
             {/* Legal Section */}
             <div>
-              <h3 className="text-lg font-semibold font-playfair text-gray-900 dark:text-white mb-4">
-                IMPORTANT INFORMATION
+              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
+                Important Information
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 <li>
                   <button
                     onClick={() => setIsDisclaimerOpen(true)}
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-source-sans-pro transition-colors text-left"
+                    className="text-sm transition-colors text-left"
                     data-testid="disclaimer-button"
+                    style={{ 
+                      color: 'var(--muted)',
+                      transition: 'color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted)'}
                   >
                     Disclaimer & Safety Notice
                   </button>
                 </li>
                 <li>
-                  <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 font-source-sans-pro">
+                  <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--muted)' }}>
                     <AlertTriangle className="h-3 w-3" aria-hidden="true" />
                     Always verify ingredients manually
                   </div>
@@ -78,8 +96,8 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-sm text-gray-500 dark:text-gray-500 font-source-sans-pro">
+          <div className="border-t mt-12 pt-8 text-center" style={{ borderColor: 'var(--border)' }}>
+            <p className="text-sm" style={{ color: 'var(--muted)' }}>
               {siteData.legal.copyright}
             </p>
           </div>

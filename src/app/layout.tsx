@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { siteData } from "@/lib/siteData";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair",
@@ -15,12 +16,15 @@ const sourceSans3 = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Allergy Agents",
-  description: "AI-powered food allergy detection from ingredient photos",
+  title: {
+    default: siteData.name,
+    template: `%s | ${siteData.name}`,
+  },
+  description: siteData.description,
   keywords: ["allergy", "food safety", "AI", "ingredient analysis"],
-  authors: [{ name: "Allergy Agents" }],
-  creator: "Allergy Agents",
-  publisher: "Allergy Agents",
+  authors: [{ name: siteData.name }],
+  creator: siteData.name,
+  publisher: siteData.legal.company,
   formatDetection: {
     email: false,
     address: false,
