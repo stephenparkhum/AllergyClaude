@@ -14,9 +14,9 @@ export default function HowToPage() {
 
       <main className="max-w-5xl mx-auto px-6 py-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1
-            className="text-4xl md:text-5xl font-semibold mb-6"
+            className="text-2xl md:text-3xl font-semibold mb-4"
             style={{ color: 'var(--foreground)' }}
             data-testid="how-to-title"
           >
@@ -64,12 +64,12 @@ export default function HowToPage() {
 
           <div className="space-y-12">
             {/* Step 1 */}
-            <div className="flex gap-6" data-testid="step-1">
+            <div className="flex gap-4 md:gap-6" data-testid="step-1">
               <div
-                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--accent)', color: 'white' }}
               >
-                <span className="text-xl font-semibold">1</span>
+                <span className="text-lg md:text-xl font-semibold">1</span>
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
@@ -94,12 +94,12 @@ export default function HowToPage() {
             </div>
 
             {/* Step 2 */}
-            <div className="flex gap-6" data-testid="step-2">
+            <div className="flex gap-4 md:gap-6" data-testid="step-2">
               <div
-                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--accent)', color: 'white' }}
               >
-                <span className="text-xl font-semibold">2</span>
+                <span className="text-lg md:text-xl font-semibold">2</span>
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
@@ -155,12 +155,12 @@ export default function HowToPage() {
             </div>
 
             {/* Step 3 */}
-            <div className="flex gap-6" data-testid="step-3">
+            <div className="flex gap-4 md:gap-6" data-testid="step-3">
               <div
-                className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--accent)', color: 'white' }}
               >
-                <span className="text-xl font-semibold">3</span>
+                <span className="text-lg md:text-xl font-semibold">3</span>
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>

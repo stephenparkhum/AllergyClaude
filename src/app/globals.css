@@ -35,7 +35,7 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
-  --font-heading: var(--font-playfair);
+  --font-heading: var(--font-source-sans-pro);
   --font-body: var(--font-source-sans-pro);
   --radius: var(--radius);
 }
@@ -74,6 +74,9 @@ body {
   antialiased: true;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 h1,
@@ -112,4 +115,59 @@ h6 {
   border-radius: calc(var(--radius) - 4px);
   border: 1px solid var(--border);
   background: var(--surface);
+}
+
+/* Mobile-first enhancements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better readability on mobile */
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Optimize tap targets */
+  .MuiIconButton-root {
+    padding: 12px !important;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  
+  /* Improve card spacing on mobile */
+  .minimal-card {
+    margin: 8px;
+    padding: 20px;
+  }
+  
+  /* Better mobile navigation */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* Safe area insets for devices with notches */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
 }

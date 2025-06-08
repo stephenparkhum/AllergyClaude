@@ -125,27 +125,27 @@ export default function Home() {
     <div className="min-h-screen" style={{ background: 'var(--background)' }}>
       <Navigation />
 
-      <main className="max-w-7xl mx-auto px-6 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {isMobile ? (
           // Mobile Layout - Single Column
-          <div className="space-y-4">
-            {/* Compact Input Section */}
-            <Card className="p-4" data-testid="input-card">
-              <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+          <div className="space-y-6">
+            {/* Mobile Input Section */}
+            <Card className="p-6" data-testid="input-card" elevation={2}>
+              <Typography variant="h5" className="mb-4 font-semibold" style={{ color: 'var(--foreground)' }}>
                 Setup Analysis
               </Typography>
 
               {/* Allergies Input */}
-              <div className="mb-6">
+              <div className="mb-8">
                 <TextField
                   label="Known allergies"
                   placeholder="peanuts, shellfish, dairy..."
                   value={allergies}
                   onChange={e => setAllergies(e.target.value)}
                   multiline
-                  rows={2}
+                  rows={3}
                   fullWidth
-                  size="small"
+                  size="medium"
                   variant="outlined"
                   data-testid="allergies-input"
                   sx={{
@@ -161,19 +161,19 @@ export default function Home() {
                 />
               </div>
 
-              {/* Inline Image Upload and Preview */}
-              <div className="mb-6">
+              {/* Image Upload and Preview */}
+              <div className="mb-8">
                 <Typography
-                  variant="subtitle2"
-                  className="mb-2"
+                  variant="subtitle1"
+                  className="mb-3 font-medium"
                   style={{ color: 'var(--foreground)' }}
                 >
                   Food Label Photo
                 </Typography>
                 {uploadedImage ? (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div
-                      className="relative w-full h-32 rounded-lg overflow-hidden"
+                      className="relative w-full h-40 rounded-lg overflow-hidden"
                       style={{ backgroundColor: 'var(--background)' }}
                     >
                       <Image
@@ -184,7 +184,7 @@ export default function Home() {
                       />
                     </div>
                     <Button
-                      size="small"
+                      size="large"
                       onClick={handleRemoveImage}
                       startIcon={<RefreshCw className="h-4 w-4" />}
                       fullWidth
@@ -201,26 +201,26 @@ export default function Home() {
               {/* Analyze Button */}
               <Button
                 variant="contained"
+                color="primary"
                 onClick={analyzeIngredients}
                 disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
                 fullWidth
+                size="large"
                 data-testid="analyze-button"
                 sx={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'white',
                   textTransform: 'none',
-                  fontWeight: 500,
-                  '&:hover': { backgroundColor: 'var(--accent)', opacity: 0.9 },
-                  '&:disabled': { backgroundColor: 'var(--muted)', color: 'white' },
+                  fontWeight: 600,
+                  fontSize: '1.2rem',
+                  py: 2,
                 }}
               >
                 {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}
               </Button>
             </Card>
 
-            {/* Compact Results with Tabs */}
-            <Card className="p-4" data-testid="results-card">
-              <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+            {/* Results with Tabs */}
+            <Card className="p-6" data-testid="results-card" elevation={2}>
+              <Typography variant="h5" className="mb-4 font-semibold" style={{ color: 'var(--foreground)' }}>
                 Results
               </Typography>
 
@@ -492,17 +492,14 @@ export default function Home() {
                 {/* Analyze button */}
                 <Button
                   variant="contained"
+                  color="primary"
                   fullWidth
                   onClick={analyzeIngredients}
                   disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
                   data-testid="analyze-button"
                   sx={{
-                    backgroundColor: 'var(--accent)',
-                    color: 'white',
                     textTransform: 'none',
                     fontWeight: 500,
-                    '&:hover': { backgroundColor: 'var(--accent)', opacity: 0.9 },
-                    '&:disabled': { backgroundColor: 'var(--muted)', color: 'white' },
                   }}
                 >
                   {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}

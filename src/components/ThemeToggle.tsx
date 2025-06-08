@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 import { Sun, Moon } from 'lucide-react';
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  iconColor?: string;
+}
+
+export default function ThemeToggle({ iconColor = 'inherit' }: ThemeToggleProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -20,6 +24,7 @@ export default function ThemeToggle() {
         data-testid="theme-toggle-loading"
         aria-label="Theme toggle loading"
         size="medium"
+        sx={{ color: iconColor }}
       >
         <Moon className="h-5 w-5" />
       </IconButton>
@@ -36,7 +41,7 @@ export default function ThemeToggle() {
       aria-label={`Switch to ${nextTheme} mode. Currently in ${theme} mode.`}
       title={`Switch to ${nextTheme} mode`}
       size="medium"
-      color="inherit"
+      sx={{ color: iconColor }}
     >
       {isDark ? (
         <Sun className="h-5 w-5" aria-hidden="true" />

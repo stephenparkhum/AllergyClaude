@@ -1,13 +1,8 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Source_Sans_3 } from 'next/font/google';
+import { Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { siteData } from '@/lib/siteData';
-
-const playfairDisplay = Playfair_Display({
-  variable: '--font-playfair',
-  subsets: ['latin'],
-});
 
 const sourceSans3 = Source_Sans_3({
   weight: ['400', '600', '700'],
@@ -35,7 +30,9 @@ export const metadata: Metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({
@@ -50,8 +47,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.getItem('allergy-agents-theme') === 'dark' || 
-                    (!localStorage.getItem('allergy-agents-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                if (localStorage.getItem('allergy-agents-theme') === 'dark') {
                   document.documentElement.classList.add('dark')
                 } else {
                   document.documentElement.classList.remove('dark')
@@ -61,7 +57,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${playfairDisplay.variable} ${sourceSans3.variable} antialiased`}>
+      <body className={`${sourceSans3.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

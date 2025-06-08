@@ -12,101 +12,104 @@ export default function Footer() {
   return (
     <>
       <footer
-        className="border-t mt-20"
+        className="border-t mt-12"
         style={{ borderColor: 'var(--border)', backgroundColor: 'var(--background)' }}
         data-testid="footer"
       >
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {/* About Section */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-                {siteData.name}
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                {siteData.description}
+        <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+          {/* Mobile: Single column with horizontal links */}
+          <div className="block md:hidden">
+            <div className="text-center space-y-4">
+              {/* Navigation Links */}
+              <div className="flex justify-center items-center gap-6 text-sm">
+                <Link
+                  href="/"
+                  data-testid="footer-home-link"
+                  style={{ color: 'var(--muted)' }}
+                  className="hover:text-accent transition-colors"
+                >
+                  Home
+                </Link>
+                <span style={{ color: 'var(--border)' }}>•</span>
+                <Link
+                  href="/how-to"
+                  data-testid="footer-howto-link"
+                  style={{ color: 'var(--muted)' }}
+                  className="hover:text-accent transition-colors"
+                >
+                  How to Use
+                </Link>
+                <span style={{ color: 'var(--border)' }}>•</span>
+                <button
+                  onClick={() => setIsDisclaimerOpen(true)}
+                  data-testid="disclaimer-button"
+                  style={{ color: 'var(--muted)' }}
+                  className="hover:text-accent transition-colors text-sm"
+                >
+                  Disclaimer
+                </button>
+              </div>
+              
+              {/* Safety Notice */}
+              <div className="flex items-center justify-center gap-2 text-xs" style={{ color: '#f59e0b' }}>
+                <AlertTriangle className="h-3 w-3" aria-hidden="true" />
+                <span>Always verify ingredients manually</span>
+              </div>
+              
+              {/* Copyright */}
+              <p className="text-xs" style={{ color: 'var(--muted)' }}>
+                {siteData.legal.copyright}
               </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-                Quick Links
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link
-                    href="/"
-                    className="text-sm transition-colors"
-                    data-testid="footer-home-link"
-                    style={{
-                      color: 'var(--muted)',
-                      transition: 'color 0.2s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/how-to"
-                    className="text-sm transition-colors"
-                    data-testid="footer-howto-link"
-                    style={{
-                      color: 'var(--muted)',
-                      transition: 'color 0.2s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
-                  >
-                    How to Use
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal Section */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-                Important Information
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <button
-                    onClick={() => setIsDisclaimerOpen(true)}
-                    className="text-sm transition-colors text-left"
-                    data-testid="disclaimer-button"
-                    style={{
-                      color: 'var(--muted)',
-                      transition: 'color 0.2s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--muted)')}
-                  >
-                    Disclaimer & Safety Notice
-                  </button>
-                </li>
-                <li>
-                  <div className="flex items-center gap-2 text-sm" style={{ color: '#f59e0b' }}>
-                    <AlertTriangle
-                      className="h-3 w-3"
-                      style={{ color: '#f59e0b' }}
-                      aria-hidden="true"
-                    />
-                    Always verify ingredients manually
-                  </div>
-                </li>
-              </ul>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t mt-12 pt-8 text-center" style={{ borderColor: 'var(--border)' }}>
-            <p className="text-sm" style={{ color: 'var(--muted)' }}>
-              {siteData.legal.copyright}
-            </p>
+          {/* Desktop: Horizontal layout */}
+          <div className="hidden md:block">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              {/* Left side: Brand and links */}
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-6 text-sm">
+                  <span className="font-medium" style={{ color: 'var(--foreground)' }}>
+                    {siteData.name}
+                  </span>
+                  <Link
+                    href="/"
+                    data-testid="footer-home-link"
+                    style={{ color: 'var(--muted)' }}
+                    className="hover:text-accent transition-colors"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    href="/how-to"
+                    data-testid="footer-howto-link"
+                    style={{ color: 'var(--muted)' }}
+                    className="hover:text-accent transition-colors"
+                  >
+                    How to Use
+                  </Link>
+                  <button
+                    onClick={() => setIsDisclaimerOpen(true)}
+                    data-testid="disclaimer-button"
+                    style={{ color: 'var(--muted)' }}
+                    className="hover:text-accent transition-colors"
+                  >
+                    Disclaimer
+                  </button>
+                </div>
+              </div>
+
+              {/* Right side: Safety notice and copyright */}
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-2" style={{ color: '#f59e0b' }}>
+                  <AlertTriangle className="h-3 w-3" aria-hidden="true" />
+                  <span className="text-xs">Always verify ingredients</span>
+                </div>
+                <p className="text-xs" style={{ color: 'var(--muted)' }}>
+                  {siteData.legal.copyright}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

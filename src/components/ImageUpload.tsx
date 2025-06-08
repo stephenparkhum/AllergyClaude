@@ -69,9 +69,9 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
       />
 
       {preview ? (
-        <div className="space-y-4" data-testid="upload-success">
+        <div className="space-y-6" data-testid="upload-success">
           <div
-            className="text-center text-green-600 dark:text-green-400 font-source-sans-pro"
+            className="text-center text-green-600 dark:text-green-400 font-source-sans-pro text-lg font-medium"
             role="status"
             aria-live="polite"
           >
@@ -82,6 +82,7 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
             onClick={handleButtonClick}
             className="w-full font-source-sans-pro"
             startIcon={<RefreshCw className="h-4 w-4" />}
+            size="large"
             data-testid="upload-different-button"
             aria-label="Upload a different image file"
           >
@@ -98,7 +99,7 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
           data-testid="upload-area"
         >
           <CardContent
-            className="p-8 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="p-12 text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
@@ -114,11 +115,11 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
             aria-label="Upload ingredient photo by clicking or dragging and dropping"
           >
             <div className="flex flex-col items-center">
-              <Upload className="w-12 h-12 text-gray-400 mb-4" aria-hidden="true" />
-              <p className="text-lg font-medium mb-2 font-playfair" id="upload-instructions">
+              <Upload className="w-16 h-16 text-gray-400 mb-6" aria-hidden="true" />
+              <p className="text-xl font-semibold mb-3 font-playfair" id="upload-instructions">
                 UPLOAD INGREDIENT PHOTO
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 font-source-sans-pro">
+              <p className="text-base text-gray-500 dark:text-gray-400 mb-6 font-source-sans-pro">
                 Drag and drop or click to select
               </p>
               <Button
@@ -126,6 +127,7 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
                 variant="outlined"
                 className="font-source-sans-pro"
                 startIcon={<Upload className="h-4 w-4" />}
+                size="large"
                 data-testid="choose-file-button"
                 tabIndex={-1}
                 aria-hidden="true"
