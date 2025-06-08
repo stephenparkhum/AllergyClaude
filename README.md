@@ -27,28 +27,33 @@ An AI-powered web application that analyzes food ingredient photos to detect all
 ## Setup Instructions
 
 1. **Clone and install dependencies:**
+
    ```bash
    cd allergy-agents
    npm install
    ```
 
 2. **Set up environment variables:**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Then edit `.env.local` and add your API key:
+
    ```
    GOOGLE_GENERATIVE_AI_API_KEY=your_google_ai_api_key_here
    ```
-   
+
    Or if using other providers:
+
    ```
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
    OPENAI_API_KEY=your_openai_api_key_here
    ```
 
 3. **Run the development server:**
+
    ```bash
    npm run dev
    ```
@@ -72,6 +77,7 @@ An AI-powered web application that analyzes food ingredient photos to detect all
 ## API Configuration
 
 The app uses the Vercel AI SDK and can work with:
+
 - **Google Gemini** (currently configured, excellent for vision tasks)
 - **Anthropic Claude** (recommended alternative for vision tasks)
 - **OpenAI GPT-4 Vision**

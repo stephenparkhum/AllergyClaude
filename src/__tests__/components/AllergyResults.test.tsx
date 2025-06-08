@@ -26,19 +26,19 @@ const mockUnsafeResults = {
 describe('AllergyResults', () => {
   it('should display safe message for safe products', () => {
     render(<AllergyResults results={mockSafeResults} />);
-    
+
     expect(screen.getByText('SAFE TO CONSUME')).toBeInTheDocument();
   });
 
   it('should display unsafe message for unsafe products', () => {
     render(<AllergyResults results={mockUnsafeResults} />);
-    
+
     expect(screen.getByText('CONTAINS ALLERGENS')).toBeInTheDocument();
   });
 
   it('should display detected allergens for unsafe products', () => {
     render(<AllergyResults results={mockUnsafeResults} />);
-    
+
     expect(screen.getByText('DETECTED ALLERGENS:')).toBeInTheDocument();
     expect(screen.getAllByText('peanuts')).toHaveLength(2); // Appears in detected_allergens and ingredients
     expect(screen.getByText('dairy')).toBeInTheDocument();
@@ -46,13 +46,13 @@ describe('AllergyResults', () => {
 
   it('should not display allergens section for safe products', () => {
     render(<AllergyResults results={mockSafeResults} />);
-    
+
     expect(screen.queryByText('DETECTED ALLERGENS:')).not.toBeInTheDocument();
   });
 
   it('should display all detected ingredients', () => {
     render(<AllergyResults results={mockSafeResults} />);
-    
+
     expect(screen.getByText('DETECTED INGREDIENTS:')).toBeInTheDocument();
     expect(screen.getByText('wheat')).toBeInTheDocument();
     expect(screen.getByText('water')).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('AllergyResults', () => {
 
   it('should display analysis when provided', () => {
     render(<AllergyResults results={mockSafeResults} />);
-    
+
     expect(screen.getByText('DETAILED ANALYSIS:')).toBeInTheDocument();
     expect(screen.getByText('This product appears safe for consumption.')).toBeInTheDocument();
   });
@@ -74,9 +74,9 @@ describe('AllergyResults', () => {
       warning_ingredients: [],
       unsafe_ingredients: [],
     };
-    
+
     render(<AllergyResults results={resultsWithoutIngredients} />);
-    
+
     expect(screen.queryByText('DETECTED INGREDIENTS:')).not.toBeInTheDocument();
   });
 
@@ -85,9 +85,9 @@ describe('AllergyResults', () => {
       ...mockSafeResults,
       analysis: '',
     };
-    
+
     render(<AllergyResults results={resultsWithoutAnalysis} />);
-    
+
     expect(screen.queryByText('DETAILED ANALYSIS:')).not.toBeInTheDocument();
   });
 });

@@ -1,21 +1,58 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Button, TextField, CircularProgress } from "@mui/material";
-import { Shield, Eye } from "lucide-react";
-import Image from "next/image";
-import ImageUpload from "@/components/ImageUpload";
-import AllergyResults from "@/components/AllergyResults";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import { saveToLocalStorage, getFromLocalStorage } from "@/lib/utils/storage";
-import { validateAnalysisRequest } from "@/lib/utils/validation";
+import { useState, useEffect } from 'react';
+import {
+  Button,
+  TextField,
+  CircularProgress,
+  Tabs,
+  Tab,
+  Box,
+  Chip,
+  Typography,
+  Card,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { Shield, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
+import Image from 'next/image';
+import ImageUpload from '@/components/ImageUpload';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import { saveToLocalStorage, getFromLocalStorage } from '@/lib/utils/storage';
+import { validateAnalysisRequest } from '@/lib/utils/validation';
+
+// TabPanel component for the results tabs
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel({ children, value, index, ...other }: TabPanelProps) {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`results-tabpanel-${index}`}
+      aria-labelledby={`results-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
+    </div>
+  );
+}
 
 export default function Home() {
-  const [allergies, setAllergies] = useState<string>("");
+  const [allergies, setAllergies] = useState<string>('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [results, setResults] = useState<{
     safe: boolean;
+    food_name: string;
+    food_brand: string;
     detected_allergens: string[];
     potential_allergens: string[];
     safe_ingredients: string[];
@@ -48,6 +85,11 @@ export default function Home() {
     setResults(null);
   };
 
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
+    setResults(null);
+  };
+
   const analyzeIngredients = async () => {
     const validation = validateAnalysisRequest(uploadedImage, allergies);
     if (!validation.isValid) {
@@ -57,10 +99,10 @@ export default function Home() {
 
     setIsAnalyzing(true);
     try {
-      const response = await fetch("/api/analyze", {
-        method: "POST",
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           image: uploadedImage,
@@ -71,8 +113,9 @@ export default function Home() {
       const data = await response.json();
       setResults(data);
     } catch (error) {
-      console.error("Error analyzing ingredients:", error);
-      alert("Error analyzing ingredients. Please try again.");
+      // eslint-disable-next-line no-console
+      console.error('Error analyzing ingredients:', error);
+      alert('Error analyzing ingredients. Please try again.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -82,155 +125,630 @@ export default function Home() {
     <div className="min-h-screen" style={{ background: 'var(--background)' }}>
       <Navigation />
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          
-          {/* Left Column - Input */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Allergies Section */}
-            <div className="minimal-card p-6" data-testid="allergies-card">
-              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="allergies-heading">
-                Your Allergies
-              </h2>
-              <TextField
-                label="Known allergies"
-                placeholder="peanuts, shellfish, dairy, gluten..."
-                value={allergies}
-                onChange={(e) => setAllergies(e.target.value)}
-                multiline
-                rows={4}
+      <main className="max-w-7xl mx-auto px-6 py-6">
+        {isMobile ? (
+          // Mobile Layout - Single Column
+          <div className="space-y-4">
+            {/* Compact Input Section */}
+            <Card className="p-4" data-testid="input-card">
+              <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+                Setup Analysis
+              </Typography>
+
+              {/* Allergies Input */}
+              <div className="mb-6">
+                <TextField
+                  label="Known allergies"
+                  placeholder="peanuts, shellfish, dairy..."
+                  value={allergies}
+                  onChange={e => setAllergies(e.target.value)}
+                  multiline
+                  rows={2}
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  data-testid="allergies-input"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'var(--surface)',
+                      '& fieldset': { borderColor: 'var(--border)' },
+                      '&:hover fieldset': { borderColor: 'var(--accent)' },
+                      '&.Mui-focused fieldset': { borderColor: 'var(--accent)' },
+                    },
+                    '& .MuiInputLabel-root': { color: 'var(--muted)' },
+                    '& .MuiInputBase-input': { color: 'var(--foreground)' },
+                  }}
+                />
+              </div>
+
+              {/* Inline Image Upload and Preview */}
+              <div className="mb-6">
+                <Typography
+                  variant="subtitle2"
+                  className="mb-2"
+                  style={{ color: 'var(--foreground)' }}
+                >
+                  Food Label Photo
+                </Typography>
+                {uploadedImage ? (
+                  <div className="space-y-2">
+                    <div
+                      className="relative w-full h-32 rounded-lg overflow-hidden"
+                      style={{ backgroundColor: 'var(--background)' }}
+                    >
+                      <Image
+                        src={uploadedImage}
+                        alt="Uploaded photo"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <Button
+                      size="small"
+                      onClick={handleRemoveImage}
+                      startIcon={<RefreshCw className="h-4 w-4" />}
+                      fullWidth
+                      variant="outlined"
+                    >
+                      Upload Different Image
+                    </Button>
+                  </div>
+                ) : (
+                  <ImageUpload onImageUpload={handleImageUpload} />
+                )}
+              </div>
+
+              {/* Analyze Button */}
+              <Button
+                variant="contained"
+                onClick={analyzeIngredients}
+                disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
                 fullWidth
-                variant="outlined"
-                className="minimal-input"
-                data-testid="allergies-input"
-                aria-labelledby="allergies-heading"
-                aria-describedby="allergies-description"
+                data-testid="analyze-button"
                 sx={{
-                  '& .MuiOutlinedInput-root': {
-                    backgroundColor: 'var(--surface)',
-                    borderRadius: 'calc(var(--radius) - 4px)',
-                    '& fieldset': {
-                      borderColor: 'var(--border)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'var(--accent)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'var(--accent)',
-                    },
-                  },
-                  '& .MuiInputLabel-root': {
-                    color: 'var(--muted)',
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'var(--foreground)',
-                  },
+                  backgroundColor: 'var(--accent)',
+                  color: 'white',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  '&:hover': { backgroundColor: 'var(--accent)', opacity: 0.9 },
+                  '&:disabled': { backgroundColor: 'var(--muted)', color: 'white' },
                 }}
-              />
-              <p id="allergies-description" className="text-sm mt-3" style={{ color: 'var(--muted)' }}>
-                List allergies separated by commas for accurate analysis
-              </p>
-            </div>
+              >
+                {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}
+              </Button>
+            </Card>
 
-            {/* Upload Section */}
-            <div className="minimal-card p-6" data-testid="upload-card">
-              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="upload-heading">
-                Food Label Photo
-              </h2>
-              <ImageUpload onImageUpload={handleImageUpload} />
-            </div>
+            {/* Compact Results with Tabs */}
+            <Card className="p-4" data-testid="results-card">
+              <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+                Results
+              </Typography>
+
+              {isAnalyzing ? (
+                <div className="text-center py-8">
+                  <CircularProgress size={32} sx={{ color: 'var(--accent)', mb: 2 }} />
+                  <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                    Analyzing ingredients...
+                  </Typography>
+                </div>
+              ) : results ? (
+                <div>
+                  {/* Product Information */}
+                  {(results.food_name !== 'Unknown Product' ||
+                    results.food_brand !== 'Unknown Brand') && (
+                    <div
+                      className="mb-4 p-3 rounded-lg"
+                      style={{
+                        backgroundColor: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle2"
+                        className="font-semibold mb-1"
+                        style={{ color: 'var(--foreground)' }}
+                      >
+                        Product Information
+                      </Typography>
+                      {results.food_brand !== 'Unknown Brand' && (
+                        <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                          <strong>Brand:</strong> {results.food_brand}
+                        </Typography>
+                      )}
+                      {results.food_name !== 'Unknown Product' && (
+                        <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                          <strong>Product:</strong> {results.food_name}
+                        </Typography>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Compact Safety Status */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <Chip
+                      icon={
+                        results.safe ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : (
+                          <AlertTriangle className="h-4 w-4" />
+                        )
+                      }
+                      label={results.safe ? 'SAFE' : 'CONTAINS ALLERGENS'}
+                      color={results.safe ? 'success' : 'error'}
+                      variant="filled"
+                      size="small"
+                    />
+                    <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                      {results.detected_allergens.length} allergen
+                      {results.detected_allergens.length !== 1 ? 's' : ''} detected
+                    </Typography>
+                  </div>
+
+                  {/* Tabbed Results */}
+                  <Box sx={{ borderBottom: 1, borderColor: 'var(--border)' }}>
+                    <Tabs
+                      value={activeTab}
+                      onChange={(_, newValue) => setActiveTab(newValue)}
+                      variant="fullWidth"
+                      textColor="inherit"
+                      indicatorColor="primary"
+                    >
+                      <Tab label="Safety" sx={{ color: 'var(--foreground)', minHeight: 40 }} />
+                      <Tab label="Ingredients" sx={{ color: 'var(--foreground)', minHeight: 40 }} />
+                      <Tab label="Analysis" sx={{ color: 'var(--foreground)', minHeight: 40 }} />
+                    </Tabs>
+                  </Box>
+
+                  <TabPanel value={activeTab} index={0}>
+                    {/* Safety Tab - Detected Allergens */}
+                    <div className="space-y-4">
+                      {results.detected_allergens.length > 0 && (
+                        <div>
+                          <Typography variant="caption" color="error" className="font-semibold">
+                            DETECTED ALLERGENS:
+                          </Typography>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {results.detected_allergens.map(allergen => (
+                              <Chip key={allergen} label={allergen} size="small" color="error" />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {results.potential_allergens.length > 0 && (
+                        <div>
+                          <Typography variant="caption" color="warning" className="font-semibold">
+                            POTENTIAL ALLERGENS:
+                          </Typography>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {results.potential_allergens.map(allergen => (
+                              <Chip key={allergen} label={allergen} size="small" color="warning" />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </TabPanel>
+
+                  <TabPanel value={activeTab} index={1}>
+                    {/* Ingredients Tab */}
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {results.ingredients.map(ingredient => {
+                          // Determine the color based on which category the ingredient is in
+                          let chipColor: 'success' | 'warning' | 'error' | 'default' = 'default';
+                          let chipVariant: 'filled' | 'outlined' = 'outlined';
+
+                          if (results.safe_ingredients.includes(ingredient)) {
+                            chipColor = 'success';
+                          } else if (results.warning_ingredients.includes(ingredient)) {
+                            chipColor = 'warning';
+                          } else if (results.unsafe_ingredients.includes(ingredient)) {
+                            chipColor = 'error';
+                            chipVariant = 'filled';
+                          }
+
+                          return (
+                            <Chip
+                              key={ingredient}
+                              label={ingredient}
+                              size="small"
+                              color={chipColor}
+                              variant={chipVariant}
+                            />
+                          );
+                        })}
+                      </div>
+
+                      {results.unsafe_ingredients.length > 0 && (
+                        <div>
+                          <Typography variant="caption" color="error" className="font-semibold">
+                            ⚠️ UNSAFE INGREDIENTS:
+                          </Typography>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {results.unsafe_ingredients.map(ingredient => (
+                              <Chip
+                                key={ingredient}
+                                label={ingredient}
+                                size="small"
+                                color="error"
+                                variant="filled"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </TabPanel>
+
+                  <TabPanel value={activeTab} index={2}>
+                    {/* Analysis Tab */}
+                    <Typography
+                      variant="body2"
+                      style={{ color: 'var(--foreground)', lineHeight: 1.6 }}
+                    >
+                      {results.analysis}
+                    </Typography>
+                  </TabPanel>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Shield
+                    className="h-12 w-12 mx-auto mb-3 opacity-20"
+                    style={{ color: 'var(--muted)' }}
+                  />
+                  <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                    Upload an image to begin analysis
+                  </Typography>
+                </div>
+              )}
+            </Card>
           </div>
+        ) : (
+          // Desktop Layout - Sidebar + Main Content
+          <div className="flex gap-6">
+            {/* Sidebar - Fixed width */}
+            <aside className="w-80 space-y-4">
+              <Card className="p-4 sticky top-4" data-testid="sidebar-card">
+                <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+                  Setup Analysis
+                </Typography>
 
-          {/* Right Column - Preview & Analysis */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Image Preview */}
-            <div className="minimal-card p-6" data-testid="preview-card">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold" style={{ color: 'var(--foreground)' }} id="preview-heading">
-                  Preview
-                </h2>
+                {/* Compact allergies input */}
+                <div className="mb-6">
+                  <TextField
+                    label="Known Allergies"
+                    placeholder="peanuts, dairy, gluten..."
+                    value={allergies}
+                    onChange={e => setAllergies(e.target.value)}
+                    size="small"
+                    fullWidth
+                    multiline
+                    rows={3}
+                    variant="outlined"
+                    data-testid="allergies-input"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'var(--surface)',
+                        '& fieldset': { borderColor: 'var(--border)' },
+                        '&:hover fieldset': { borderColor: 'var(--accent)' },
+                        '&.Mui-focused fieldset': { borderColor: 'var(--accent)' },
+                      },
+                      '& .MuiInputLabel-root': { color: 'var(--muted)' },
+                      '& .MuiInputBase-input': { color: 'var(--foreground)' },
+                    }}
+                  />
+                  <Typography
+                    variant="caption"
+                    style={{ color: 'var(--muted)' }}
+                    className="mt-1 block"
+                  >
+                    Separate with commas
+                  </Typography>
+                </div>
+
+                {/* Compact inline upload and preview */}
+                <div className="mb-6">
+                  <Typography
+                    variant="subtitle2"
+                    className="mb-2"
+                    style={{ color: 'var(--foreground)' }}
+                  >
+                    Food Label Photo
+                  </Typography>
+                  {uploadedImage ? (
+                    <div className="space-y-2">
+                      <div
+                        className="relative w-full h-40 rounded-lg overflow-hidden"
+                        style={{ backgroundColor: 'var(--background)' }}
+                      >
+                        <Image
+                          src={uploadedImage}
+                          alt="Uploaded photo"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <Button
+                        size="small"
+                        onClick={handleRemoveImage}
+                        startIcon={<RefreshCw className="h-4 w-4" />}
+                        fullWidth
+                        variant="outlined"
+                        sx={{
+                          borderColor: 'var(--border)',
+                          color: 'var(--foreground)',
+                          textTransform: 'none',
+                          '&:hover': { borderColor: 'var(--accent)', color: 'var(--accent)' },
+                        }}
+                      >
+                        Upload Different Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <ImageUpload onImageUpload={handleImageUpload} />
+                  )}
+                </div>
+
+                {/* Analyze button */}
                 <Button
                   variant="contained"
+                  fullWidth
                   onClick={analyzeIngredients}
                   disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
-                  className="minimal-button"
                   data-testid="analyze-button"
-                  aria-label={isAnalyzing ? "Analyzing ingredients, please wait" : "Analyze ingredients for allergens"}
                   sx={{
                     backgroundColor: 'var(--accent)',
                     color: 'white',
-                    borderRadius: 'calc(var(--radius) - 2px)',
-                    fontWeight: 500,
                     textTransform: 'none',
-                    boxShadow: 'none',
-                    '&:hover': {
-                      backgroundColor: 'var(--accent)',
-                      opacity: 0.9,
-                      boxShadow: 'none',
-                    },
-                    '&:disabled': {
-                      backgroundColor: 'var(--muted)',
-                      color: 'white',
-                    },
+                    fontWeight: 500,
+                    '&:hover': { backgroundColor: 'var(--accent)', opacity: 0.9 },
+                    '&:disabled': { backgroundColor: 'var(--muted)', color: 'white' },
                   }}
                 >
-                  {isAnalyzing ? "Analyzing..." : "Analyze"}
+                  {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}
                 </Button>
-              </div>
-              
-              {uploadedImage ? (
-                <div className="relative w-full h-64 rounded-lg overflow-hidden" style={{ backgroundColor: 'var(--background)' }} data-testid="image-preview">
-                  <Image
-                    src={uploadedImage}
-                    alt="Uploaded ingredient photo for allergy analysis"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              ) : (
-                <div 
-                  className="w-full h-64 rounded-lg flex items-center justify-center" 
-                  style={{ backgroundColor: 'var(--background)', border: '1px dashed var(--border)' }}
-                  role="img" 
-                  aria-label="No image uploaded"
-                >
-                  <div className="text-center">
-                    <Eye className="h-12 w-12 mx-auto mb-3 opacity-30" style={{ color: 'var(--muted)' }} aria-hidden="true" />
-                    <p className="text-sm" style={{ color: 'var(--muted)' }}>Upload an image to preview</p>
-                  </div>
-                </div>
-              )}
-            </div>
+              </Card>
+            </aside>
 
-            {/* Results Section */}
-            <div className="minimal-card p-6" data-testid="results-card">
-              <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }} id="results-heading">
-                Safety Analysis
-              </h2>
-              
-              {isAnalyzing ? (
-                <div className="text-center py-12" role="status" aria-label="Analyzing ingredients" data-testid="loading-state">
-                  <CircularProgress size={48} sx={{ color: 'var(--accent)', mb: 3 }} />
-                  <p className="text-lg mb-2" style={{ color: 'var(--foreground)' }}>Analyzing ingredients...</p>
-                  <p className="text-sm" style={{ color: 'var(--muted)' }}>This may take a moment</p>
-                </div>
-              ) : results ? (
-                <div role="region" aria-labelledby="results-heading" aria-live="polite" data-testid="results-content">
-                  <AllergyResults results={results} />
-                </div>
-              ) : (
-                <div className="text-center py-12" role="status" aria-label="No results available">
-                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-20" style={{ color: 'var(--muted)' }} aria-hidden="true" />
-                  <p className="text-lg mb-2" style={{ color: 'var(--muted)' }}>Upload an image to begin analysis</p>
-                  <p className="text-sm" style={{ color: 'var(--muted)' }}>Your safety results will appear here</p>
-                </div>
-              )}
-            </div>
+            {/* Main content area */}
+            <main className="flex-1">
+              <Card className="p-4" data-testid="results-card">
+                <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
+                  Analysis Results
+                </Typography>
+
+                {isAnalyzing ? (
+                  <div className="text-center py-12">
+                    <CircularProgress size={48} sx={{ color: 'var(--accent)', mb: 3 }} />
+                    <Typography
+                      variant="h6"
+                      className="mb-2"
+                      style={{ color: 'var(--foreground)' }}
+                    >
+                      Analyzing ingredients...
+                    </Typography>
+                    <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                      This may take a moment
+                    </Typography>
+                  </div>
+                ) : results ? (
+                  <div>
+                    {/* Product Information */}
+                    {(results.food_name !== 'Unknown Product' ||
+                      results.food_brand !== 'Unknown Brand') && (
+                      <div
+                        className="mb-6 p-4 rounded-lg"
+                        style={{
+                          backgroundColor: 'var(--surface)',
+                          border: '1px solid var(--border)',
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          className="font-semibold mb-2"
+                          style={{ color: 'var(--foreground)' }}
+                        >
+                          Product Information
+                        </Typography>
+                        {results.food_brand !== 'Unknown Brand' && (
+                          <Typography
+                            variant="body1"
+                            className="mb-1"
+                            style={{ color: 'var(--muted)' }}
+                          >
+                            <strong>Brand:</strong> {results.food_brand}
+                          </Typography>
+                        )}
+                        {results.food_name !== 'Unknown Product' && (
+                          <Typography variant="body1" style={{ color: 'var(--muted)' }}>
+                            <strong>Product:</strong> {results.food_name}
+                          </Typography>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Compact Safety Status */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <Chip
+                        icon={
+                          results.safe ? (
+                            <CheckCircle className="h-5 w-5" />
+                          ) : (
+                            <AlertTriangle className="h-5 w-5" />
+                          )
+                        }
+                        label={results.safe ? 'SAFE TO CONSUME' : 'CONTAINS ALLERGENS'}
+                        color={results.safe ? 'success' : 'error'}
+                        variant="filled"
+                        sx={{ fontSize: '0.875rem', height: 32 }}
+                      />
+                      <Typography variant="body1" style={{ color: 'var(--muted)' }}>
+                        {results.detected_allergens.length} allergen
+                        {results.detected_allergens.length !== 1 ? 's' : ''} detected
+                      </Typography>
+                    </div>
+
+                    {/* Tabbed Results for Desktop */}
+                    <Box sx={{ borderBottom: 1, borderColor: 'var(--border)' }}>
+                      <Tabs
+                        value={activeTab}
+                        onChange={(_, newValue) => setActiveTab(newValue)}
+                        textColor="inherit"
+                        indicatorColor="primary"
+                      >
+                        <Tab
+                          label="Safety Overview"
+                          sx={{ color: 'var(--foreground)', textTransform: 'none' }}
+                        />
+                        <Tab
+                          label="All Ingredients"
+                          sx={{ color: 'var(--foreground)', textTransform: 'none' }}
+                        />
+                        <Tab
+                          label="Detailed Analysis"
+                          sx={{ color: 'var(--foreground)', textTransform: 'none' }}
+                        />
+                      </Tabs>
+                    </Box>
+
+                    <TabPanel value={activeTab} index={0}>
+                      {/* Safety Overview */}
+                      <div className="space-y-6">
+                        {results.detected_allergens.length > 0 && (
+                          <div>
+                            <Typography variant="h6" color="error" className="mb-2 font-semibold">
+                              ⚠️ Detected Allergens
+                            </Typography>
+                            <div className="flex flex-wrap gap-2">
+                              {results.detected_allergens.map(allergen => (
+                                <Chip
+                                  key={allergen}
+                                  label={allergen}
+                                  color="error"
+                                  variant="filled"
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {results.potential_allergens.length > 0 && (
+                          <div>
+                            <Typography variant="h6" color="warning" className="mb-2 font-semibold">
+                              ⚡ Potential Allergens
+                            </Typography>
+                            <div className="flex flex-wrap gap-2">
+                              {results.potential_allergens.map(allergen => (
+                                <Chip
+                                  key={allergen}
+                                  label={allergen}
+                                  color="warning"
+                                  variant="filled"
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {results.safe_ingredients.length > 0 && (
+                          <div>
+                            <Typography variant="h6" color="success" className="mb-2 font-semibold">
+                              ✅ Safe Ingredients ({results.safe_ingredients.length})
+                            </Typography>
+                            <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                              {results.safe_ingredients.slice(0, 5).join(', ')}
+                              {results.safe_ingredients.length > 5 &&
+                                ` and ${results.safe_ingredients.length - 5} more...`}
+                            </Typography>
+                          </div>
+                        )}
+                      </div>
+                    </TabPanel>
+
+                    <TabPanel value={activeTab} index={1}>
+                      {/* All Ingredients */}
+                      <div className="space-y-4">
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {results.ingredients.map(ingredient => {
+                            // Determine the color based on which category the ingredient is in
+                            let chipColor: 'success' | 'warning' | 'error' | 'default' = 'default';
+                            let chipVariant: 'filled' | 'outlined' = 'outlined';
+
+                            if (results.safe_ingredients.includes(ingredient)) {
+                              chipColor = 'success';
+                            } else if (results.warning_ingredients.includes(ingredient)) {
+                              chipColor = 'warning';
+                            } else if (results.unsafe_ingredients.includes(ingredient)) {
+                              chipColor = 'error';
+                              chipVariant = 'filled';
+                            }
+
+                            return (
+                              <Chip
+                                key={ingredient}
+                                label={ingredient}
+                                size="small"
+                                color={chipColor}
+                                variant={chipVariant}
+                              />
+                            );
+                          })}
+                        </div>
+
+                        {/* Categorized breakdown */}
+                        {results.unsafe_ingredients.length > 0 && (
+                          <div>
+                            <Typography
+                              variant="subtitle2"
+                              color="error"
+                              className="mb-2 font-semibold"
+                            >
+                              ⚠️ Unsafe for Your Allergies ({results.unsafe_ingredients.length})
+                            </Typography>
+                            <div className="flex flex-wrap gap-1">
+                              {results.unsafe_ingredients.map(ingredient => (
+                                <Chip
+                                  key={ingredient}
+                                  label={ingredient}
+                                  size="small"
+                                  color="error"
+                                  variant="filled"
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </TabPanel>
+
+                    <TabPanel value={activeTab} index={2}>
+                      {/* Detailed Analysis */}
+                      <Typography
+                        variant="body1"
+                        style={{ color: 'var(--foreground)', lineHeight: 1.7 }}
+                      >
+                        {results.analysis}
+                      </Typography>
+                    </TabPanel>
+                  </div>
+                ) : (
+                  <div className="text-center py-16">
+                    <Shield
+                      className="h-20 w-20 mx-auto mb-4 opacity-20"
+                      style={{ color: 'var(--muted)' }}
+                    />
+                    <Typography variant="h6" className="mb-2" style={{ color: 'var(--muted)' }}>
+                      Ready to Analyze
+                    </Typography>
+                    <Typography variant="body2" style={{ color: 'var(--muted)' }}>
+                      Upload a food label photo and enter your allergies to get started
+                    </Typography>
+                  </div>
+                )}
+              </Card>
+            </main>
           </div>
-        </div>
+        )}
       </main>
-      
+
       <Footer />
     </div>
   );

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { IconButton } from "@mui/material";
-import { Sun, Moon } from "lucide-react";
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import { IconButton } from '@mui/material';
+import { Sun, Moon } from 'lucide-react';
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
@@ -26,8 +26,8 @@ export default function ThemeToggle() {
     );
   }
 
-  const isDark = theme === "dark";
-  const nextTheme = isDark ? "light" : "dark";
+  const isDark = theme === 'dark';
+  const nextTheme = isDark ? 'light' : 'dark';
 
   return (
     <IconButton

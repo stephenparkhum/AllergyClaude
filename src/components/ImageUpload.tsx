@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { Button, Card, CardContent } from "@mui/material";
-import { Upload, RefreshCw } from "lucide-react";
-import { isValidImageFile, convertFileToDataURL } from "@/lib/utils/image";
+import { useState, useRef } from 'react';
+import { Button, Card, CardContent } from '@mui/material';
+import { Upload, RefreshCw } from 'lucide-react';
+import { isValidImageFile, convertFileToDataURL } from '@/lib/utils/image';
 
 interface ImageUploadProps {
   onImageUpload: (imageData: string) => void;
@@ -21,10 +21,10 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
         setPreview(result);
         onImageUpload(result);
       } catch {
-        alert("Failed to read the image file");
+        alert('Failed to read the image file');
       }
     } else {
-      alert("Please select a valid image file");
+      alert('Please select a valid image file');
     }
   };
 
@@ -67,10 +67,14 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
         accept="image/*"
         className="hidden"
       />
-      
+
       {preview ? (
         <div className="space-y-4" data-testid="upload-success">
-          <div className="text-center text-green-600 dark:text-green-400 font-source-sans-pro" role="status" aria-live="polite">
+          <div
+            className="text-center text-green-600 dark:text-green-400 font-source-sans-pro"
+            role="status"
+            aria-live="polite"
+          >
             ✓ Image uploaded successfully
           </div>
           <Button
@@ -88,8 +92,8 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
         <Card
           className={`border-2 border-dashed transition-colors shadow-sm ${
             isDragOver
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-              : "border-gray-300 dark:border-gray-600"
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+              : 'border-gray-300 dark:border-gray-600'
           }`}
           data-testid="upload-area"
         >
@@ -101,7 +105,7 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
             onClick={handleButtonClick}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 handleButtonClick();
@@ -117,8 +121,8 @@ export default function ImageUpload({ onImageUpload }: ImageUploadProps) {
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 font-source-sans-pro">
                 Drag and drop or click to select
               </p>
-              <Button 
-                color="primary" 
+              <Button
+                color="primary"
                 variant="outlined"
                 className="font-source-sans-pro"
                 startIcon={<Upload className="h-4 w-4" />}

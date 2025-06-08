@@ -1,25 +1,38 @@
-"use client";
+'use client';
 
-import { Button, useTheme, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
-import { HelpCircle } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import NoSSR from "./NoSSR";
-import ThemeToggle from "./ThemeToggle";
-import { siteData } from "@/lib/siteData";
+import {
+  Button,
+  useTheme,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+} from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { HelpCircle } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import NoSSR from './NoSSR';
+import ThemeToggle from './ThemeToggle';
+import { siteData } from '@/lib/siteData';
 
 export default function Navigation() {
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
+  const isHomePage = pathname === '/';
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
-      <nav className="border-b border-opacity-10 mb-8" style={{ borderColor: 'var(--border)' }} data-testid="navigation">
+      <nav
+        className="border-b border-opacity-10 mb-8"
+        style={{ borderColor: 'var(--border)' }}
+        data-testid="navigation"
+      >
         <div className="max-w-7xl mx-auto px-6 py-6">
           {isMobile ? (
             // Mobile Layout
@@ -37,15 +50,15 @@ export default function Navigation() {
               </div>
               <div className="text-center">
                 <Link href="/" className="block">
-                  <h1 
+                  <h1
                     className="text-2xl font-semibold tracking-tight"
                     data-testid="nav-title"
-                    style={{ 
+                    style={{
                       color: 'var(--foreground)',
                       transition: 'color 0.2s ease',
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--foreground)')}
                   >
                     {siteData.name}
                   </h1>
@@ -55,7 +68,7 @@ export default function Navigation() {
                   data-testid="nav-description"
                   style={{ color: 'var(--muted)' }}
                 >
-                  {isHomePage ? siteData.tagline : "AI-powered food allergy detection"}
+                  {isHomePage ? siteData.tagline : 'AI-powered food allergy detection'}
                 </p>
               </div>
             </div>
@@ -64,15 +77,15 @@ export default function Navigation() {
             <div className="flex justify-between items-center">
               <div>
                 <Link href="/" className="block">
-                  <h1 
+                  <h1
                     className="text-3xl font-semibold tracking-tight"
                     data-testid="nav-title"
-                    style={{ 
+                    style={{
                       color: 'var(--foreground)',
                       transition: 'color 0.2s ease',
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--foreground)')}
                   >
                     {siteData.name}
                   </h1>
@@ -82,7 +95,7 @@ export default function Navigation() {
                   data-testid="nav-description"
                   style={{ color: 'var(--muted)' }}
                 >
-                  {isHomePage ? siteData.tagline : "AI-powered food allergy detection"}
+                  {isHomePage ? siteData.tagline : 'AI-powered food allergy detection'}
                 </p>
               </div>
               <div className="flex items-center gap-4">

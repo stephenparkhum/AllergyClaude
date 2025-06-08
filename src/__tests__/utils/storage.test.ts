@@ -1,8 +1,12 @@
-import { saveToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from '@/lib/utils/storage';
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+  removeFromLocalStorage,
+} from '@/lib/utils/storage';
 
 const mockLocalStorage = (() => {
   let store: Record<string, string> = {};
-  
+
   return {
     getItem: jest.fn((key: string) => store[key] || null),
     setItem: jest.fn((key: string, value: string) => {
@@ -36,9 +40,9 @@ describe('storage utilities', () => {
     it('should handle localStorage when window is undefined', () => {
       const originalWindow = global.window;
       delete (global as unknown as { window: unknown }).window;
-      
+
       expect(() => saveToLocalStorage('testKey', 'testValue')).not.toThrow();
-      
+
       global.window = originalWindow;
     });
   });
@@ -58,10 +62,10 @@ describe('storage utilities', () => {
     it('should return null when window is undefined', () => {
       const originalWindow = global.window;
       delete (global as unknown as { window: unknown }).window;
-      
+
       const result = getFromLocalStorage('testKey');
       expect(result).toBeNull();
-      
+
       global.window = originalWindow;
     });
   });
@@ -76,9 +80,9 @@ describe('storage utilities', () => {
     it('should handle localStorage when window is undefined', () => {
       const originalWindow = global.window;
       delete (global as unknown as { window: unknown }).window;
-      
+
       expect(() => removeFromLocalStorage('testKey')).not.toThrow();
-      
+
       global.window = originalWindow;
     });
   });

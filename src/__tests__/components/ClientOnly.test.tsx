@@ -7,7 +7,7 @@ const mockSetState = jest.fn();
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
   useState: jest.fn(() => [false, mockSetState]),
-  useEffect: jest.fn((fn) => fn()),
+  useEffect: jest.fn(fn => fn()),
 }));
 
 describe('ClientOnly', () => {
@@ -23,7 +23,7 @@ describe('ClientOnly', () => {
         <div>Client content</div>
       </ClientOnly>
     );
-    
+
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     expect(screen.queryByText('Client content')).not.toBeInTheDocument();
   });
@@ -31,13 +31,13 @@ describe('ClientOnly', () => {
   it('should render children after mounting', async () => {
     // Mock useState to return true (mounted)
     (React.useState as jest.Mock).mockReturnValue([true, mockSetState]);
-    
+
     render(
       <ClientOnly>
         <div>Client content</div>
       </ClientOnly>
     );
-    
+
     expect(screen.getByText('Client content')).toBeInTheDocument();
   });
 
@@ -47,7 +47,7 @@ describe('ClientOnly', () => {
         <div>Client content</div>
       </ClientOnly>
     );
-    
+
     // Should render a div with null content when not mounted and no fallback
     expect(container.firstChild).toHaveTextContent('');
     expect(container.firstChild?.nodeName).toBe('DIV');
@@ -55,13 +55,13 @@ describe('ClientOnly', () => {
 
   it('should handle custom fallback component', () => {
     const CustomFallback = () => <div data-testid="custom-fallback">Custom loading...</div>;
-    
+
     render(
       <ClientOnly fallback={<CustomFallback />}>
         <div>Client content</div>
       </ClientOnly>
     );
-    
+
     expect(screen.getByTestId('custom-fallback')).toBeInTheDocument();
     expect(screen.getByText('Custom loading...')).toBeInTheDocument();
   });

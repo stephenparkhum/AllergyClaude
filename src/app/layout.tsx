@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import { Playfair_Display, Source_Sans_3 } from "next/font/google";
-import "./globals.css";
-import { Providers } from "./providers";
-import { siteData } from "@/lib/siteData";
+import type { Metadata } from 'next';
+import { Playfair_Display, Source_Sans_3 } from 'next/font/google';
+import './globals.css';
+import { Providers } from './providers';
+import { siteData } from '@/lib/siteData';
 
 const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
+  variable: '--font-playfair',
+  subsets: ['latin'],
 });
 
 const sourceSans3 = Source_Sans_3({
-  weight: ["400", "600", "700"],
-  variable: "--font-source-sans-pro",
-  subsets: ["latin"],
+  weight: ['400', '600', '700'],
+  variable: '--font-source-sans-pro',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: `%s | ${siteData.name}`,
   },
   description: siteData.description,
-  keywords: ["allergy", "food safety", "AI", "ingredient analysis"],
+  keywords: ['allergy', 'food safety', 'AI', 'ingredient analysis'],
   authors: [{ name: siteData.name }],
   creator: siteData.name,
   publisher: siteData.legal.company,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
 };
@@ -61,12 +61,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${playfairDisplay.variable} ${sourceSans3.variable} antialiased`}
-      >
-        <Providers>
-          {children}
-        </Providers>
+      <body className={`${playfairDisplay.variable} ${sourceSans3.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 ## Database Schema Enhancement
 
 ### Menu Item Interface
+
 ```typescript
 interface MenuItem {
   id: string;
@@ -26,20 +27,21 @@ interface MenuAnalysis {
 ## API Enhancement
 
 ### New Menu Analysis Endpoint
+
 ```typescript
 // New endpoint: /api/analyze-menu
 export async function POST(request: Request) {
   const { userAllergies, menuItem, photoData } = await request.json();
-  
+
   // Combine menu data with photo analysis
   const [menuAnalysis, photoAnalysis] = await Promise.all([
     analyzeMenuItemText(menuItem, userAllergies),
-    photoData ? analyzePhoto(photoData, userAllergies) : null
+    photoData ? analyzePhoto(photoData, userAllergies) : null,
   ]);
-  
+
   // Cross-reference and validate findings
   const combinedAnalysis = reconcileAnalyses(menuAnalysis, photoAnalysis);
-  
+
   return Response.json(combinedAnalysis);
 }
 ```
@@ -47,25 +49,26 @@ export async function POST(request: Request) {
 ## Restaurant Implementation
 
 ### Restaurant Dashboard Component
+
 ```typescript
 // Restaurant dashboard component
 function RestaurantAllergyDashboard() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  
+
   // Bulk analyze menu for common allergens
   const analyzeFullMenu = async () => {
     const analyses = await Promise.all(
-      menuItems.map(item => 
+      menuItems.map(item =>
         fetch('/api/analyze-menu', {
           method: 'POST',
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             menuItem: item,
-            userAllergies: COMMON_ALLERGENS 
-          })
+            userAllergies: COMMON_ALLERGENS,
+          }),
         })
       )
     );
-    
+
     // Generate allergen-friendly menu variants
     return createAllergenFriendlyMenus(analyses);
   };
@@ -75,27 +78,28 @@ function RestaurantAllergyDashboard() {
 ## Online Ordering Platform Implementation
 
 ### Customer-Facing Allergy-Aware Menu
+
 ```typescript
 // Customer-facing menu with real-time filtering
 function AllergyAwareMenu({ userAllergies }: { userAllergies: string[] }) {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<MenuAnalysis[]>([]);
-  
+
   useEffect(() => {
     // Real-time filtering as user types allergies
     const analyzeMenuForUser = async () => {
       const results = await Promise.all(
         menuItems.map(item => analyzeMenuItem(item, userAllergies))
       );
-      
+
       // Sort by safety: safe → warning → unsafe
-      const sorted = results.sort((a, b) => 
+      const sorted = results.sort((a, b) =>
         getSafetyScore(a) - getSafetyScore(b)
       );
-      
+
       setFilteredItems(sorted);
     };
-    
+
     if (userAllergies.length > 0) {
       analyzeMenuForUser();
     }
@@ -104,10 +108,10 @@ function AllergyAwareMenu({ userAllergies }: { userAllergies: string[] }) {
   return (
     <div className="menu-grid">
       {filteredItems.map(analysis => (
-        <MenuItemCard 
+        <MenuItemCard
           key={analysis.menu_item.id}
           analysis={analysis}
-          onPhotoUpload={(photo) => 
+          onPhotoUpload={(photo) =>
             // Allow customers to upload photos for verification
             verifyMenuItemWithPhoto(analysis.menu_item, photo, userAllergies)
           }
@@ -121,23 +125,24 @@ function AllergyAwareMenu({ userAllergies }: { userAllergies: string[] }) {
 ## Enhanced Menu Item Card Component
 
 ### Interactive Menu Item with Photo Verification
+
 ```typescript
 function MenuItemCard({ analysis }: { analysis: MenuAnalysis }) {
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [photoAnalysis, setPhotoAnalysis] = useState<AllergyResult | null>(null);
-  
+
   const handlePhotoVerification = async (photo: string) => {
     const result = await fetch('/api/analyze', {
       method: 'POST',
-      body: JSON.stringify({ 
-        image: photo, 
-        userAllergies: analysis.safety_assessment.detected_allergens 
+      body: JSON.stringify({
+        image: photo,
+        userAllergies: analysis.safety_assessment.detected_allergens
       })
     });
-    
+
     const photoResult = await result.json();
     setPhotoAnalysis(photoResult);
-    
+
     // Show comparison between menu description and actual photo
     if (hasDiscrepancy(analysis.safety_assessment, photoResult)) {
       // Alert user to potential differences
@@ -150,29 +155,29 @@ function MenuItemCard({ analysis }: { analysis: MenuAnalysis }) {
       <CardContent>
         <h3>{analysis.menu_item.name}</h3>
         <p>{analysis.menu_item.description}</p>
-        
+
         {/* Safety indicator */}
         <SafetyBadge assessment={analysis.safety_assessment} />
-        
+
         {/* Ingredient breakdown */}
-        <IngredientList 
+        <IngredientList
           ingredients={analysis.menu_item.ingredients}
           safetyData={analysis.safety_assessment}
         />
-        
+
         {/* Photo verification option */}
         <div className="photo-verification">
           <h4>Verify with Photo</h4>
           <ImageUpload onImageUpload={handlePhotoVerification} />
-          
+
           {photoAnalysis && (
-            <PhotoVerificationResults 
+            <PhotoVerificationResults
               menuAnalysis={analysis.safety_assessment}
               photoAnalysis={photoAnalysis}
             />
           )}
         </div>
-        
+
         {/* Confidence and recommendations */}
         <div className="recommendations">
           <p>Confidence: {analysis.confidence_score}%</p>
@@ -189,15 +194,16 @@ function MenuItemCard({ analysis }: { analysis: MenuAnalysis }) {
 ## Real-Time Features
 
 ### WebSocket Menu Updates
+
 ```typescript
 // WebSocket integration for live menu updates
 function useMenuUpdates(restaurantId: string) {
   useEffect(() => {
     const ws = new WebSocket(`/api/menu-updates/${restaurantId}`);
-    
-    ws.onmessage = (event) => {
+
+    ws.onmessage = event => {
       const { type, data } = JSON.parse(event.data);
-      
+
       switch (type) {
         case 'ingredient_change':
           // Re-analyze affected menu items
@@ -216,6 +222,7 @@ function useMenuUpdates(restaurantId: string) {
 ## QR Code Integration
 
 ### QR Code Menu System
+
 ```typescript
 // Generate QR codes that include allergy data
 function generateAllergyAwareQR(menuItem: MenuItem, tableId: string) {
@@ -225,7 +232,7 @@ function generateAllergyAwareQR(menuItem: MenuItem, tableId: string) {
     allergenData: menuItem.allergen_warnings,
     timestamp: Date.now()
   };
-  
+
   return generateQRCode(qrData);
 }
 
@@ -234,11 +241,11 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
   const handleQRScan = async (qrData: any) => {
     const menuItem = await fetchMenuItem(qrData.menuItemId);
     const analysis = await analyzeMenuItem(menuItem, userAllergies);
-    
+
     // Show personalized safety assessment
     showPersonalizedMenuView(analysis);
   };
-  
+
   return <QRCodeScanner onScan={handleQRScan} />;
 }
 ```
@@ -248,16 +255,19 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
 ### For Restaurant Partners
 
 1. **Menu Digitization**
+
    - Convert existing menus to structured data
    - Include detailed ingredient lists and preparation methods
    - Add cross-contamination risk assessments
 
 2. **Staff Training**
+
    - Train kitchen staff on cross-contamination protocols
    - Implement allergen handling procedures
    - Create incident response workflows
 
 3. **Real-time Updates**
+
    - System to update menu when ingredients change
    - Notification system for supply chain changes
    - Daily allergen status checks
@@ -270,16 +280,19 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
 ### For Delivery Platforms
 
 1. **Restaurant Onboarding**
+
    - Provide tools for restaurants to input detailed ingredient data
    - Standardize allergen reporting across partners
    - Implement verification processes
 
 2. **Customer Profiles**
+
    - Store user allergy profiles for seamless ordering
    - Provide allergy management dashboard
    - Enable emergency contact information
 
 3. **Photo Verification**
+
    - Allow customers to upload photos of received food
    - Compare actual food to menu descriptions
    - Flag discrepancies for restaurant follow-up
@@ -292,18 +305,21 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
 ## Implementation Benefits
 
 ### For Customers
+
 - **Enhanced Safety**: Multi-layer verification (menu + photo)
 - **Personalized Experience**: Customized menu based on allergies
 - **Real-time Updates**: Immediate alerts for menu changes
 - **Confidence**: Photo verification reduces uncertainty
 
 ### For Restaurants
+
 - **Risk Reduction**: Fewer allergen-related incidents
 - **Customer Trust**: Transparent allergen information
 - **Operational Efficiency**: Standardized allergen protocols
 - **Competitive Advantage**: Appeal to allergy-conscious diners
 
 ### For Platforms
+
 - **Market Differentiation**: First-to-market allergy safety features
 - **User Retention**: Essential tool for allergic customers
 - **Data Insights**: Understanding of dietary restrictions trends
@@ -312,6 +328,7 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
 ## Technical Architecture
 
 ### Data Flow
+
 1. **Menu Ingestion**: Restaurant uploads menu with ingredient data
 2. **AI Analysis**: System analyzes menu items for common allergens
 3. **Customer Input**: User enters personal allergy information
@@ -321,6 +338,7 @@ function QRMenuScanner({ userAllergies }: { userAllergies: string[] }) {
 7. **Safety Assessment**: Generate comprehensive safety report
 
 ### Integration Points
+
 - **POS Systems**: Direct integration with restaurant point-of-sale
 - **Inventory Management**: Real-time ingredient availability
 - **Delivery APIs**: Integration with major delivery platforms

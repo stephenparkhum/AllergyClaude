@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { siteData } from "@/lib/siteData";
+import { siteData } from '@/lib/siteData';
 
 interface PageHeaderProps {
   title?: string;
@@ -9,11 +9,11 @@ interface PageHeaderProps {
   className?: string;
 }
 
-export default function PageHeader({ 
-  title, 
-  subtitle, 
+export default function PageHeader({
+  title,
+  subtitle,
   showSiteName = false,
-  className = "" 
+  className = '',
 }: PageHeaderProps) {
   const displayTitle = title || (showSiteName ? siteData.name : undefined);
   const displaySubtitle = subtitle || (showSiteName ? siteData.tagline : undefined);
@@ -25,8 +25,8 @@ export default function PageHeader({
   return (
     <div className={`text-center mb-12 ${className}`} data-testid="page-header">
       {displayTitle && (
-        <h1 
-          className="text-4xl md:text-5xl font-semibold mb-4" 
+        <h1
+          className="text-4xl md:text-5xl font-semibold mb-4"
           style={{ color: 'var(--foreground)' }}
           data-testid="page-title"
         >
@@ -34,8 +34,8 @@ export default function PageHeader({
         </h1>
       )}
       {displaySubtitle && (
-        <p 
-          className="text-lg md:text-xl max-w-2xl mx-auto" 
+        <p
+          className="text-lg md:text-xl max-w-2xl mx-auto"
           style={{ color: 'var(--muted)' }}
           data-testid="page-subtitle"
         >

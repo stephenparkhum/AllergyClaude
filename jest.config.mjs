@@ -2,7 +2,7 @@ import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
   dir: './',
-})
+});
 
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -17,6 +17,6 @@ const customJestConfig = {
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/app/layout.tsx',
   ],
-}
+};
 
 export default createJestConfig(customJestConfig);

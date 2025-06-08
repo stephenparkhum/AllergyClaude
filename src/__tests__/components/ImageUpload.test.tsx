@@ -17,7 +17,7 @@ describe('ImageUpload', () => {
 
   it('should render upload interface initially', () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     expect(screen.getByText('UPLOAD INGREDIENT PHOTO')).toBeInTheDocument();
     expect(screen.getByText('Drag and drop or click to select')).toBeInTheDocument();
     expect(screen.getByText('Choose File')).toBeInTheDocument();
@@ -25,12 +25,12 @@ describe('ImageUpload', () => {
 
   it('should handle file selection', async () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
-    
+
     fireEvent.change(fileInput, { target: { files: [file] } });
-    
+
     await waitFor(() => {
       expect(mockImageUtils.isValidImageFile).toHaveBeenCalledWith(file);
       expect(mockImageUtils.convertFileToDataURL).toHaveBeenCalledWith(file);
@@ -40,12 +40,12 @@ describe('ImageUpload', () => {
 
   it('should show success message after upload', async () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
-    
+
     fireEvent.change(fileInput, { target: { files: [file] } });
-    
+
     await waitFor(() => {
       expect(screen.getByText('✓ Image uploaded successfully')).toBeInTheDocument();
       expect(screen.getByText('Upload Different Image')).toBeInTheDocument();
@@ -55,14 +55,14 @@ describe('ImageUpload', () => {
   it('should handle invalid file types', async () => {
     mockImageUtils.isValidImageFile.mockReturnValue(false);
     window.alert = jest.fn();
-    
+
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.txt', { type: 'text/plain' });
-    
+
     fireEvent.change(fileInput, { target: { files: [file] } });
-    
+
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith('Please select a valid image file');
       expect(mockOnImageUpload).not.toHaveBeenCalled();
@@ -72,14 +72,14 @@ describe('ImageUpload', () => {
   it('should handle file conversion errors', async () => {
     mockImageUtils.convertFileToDataURL.mockRejectedValue(new Error('Conversion failed'));
     window.alert = jest.fn();
-    
+
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
-    
+
     fireEvent.change(fileInput, { target: { files: [file] } });
-    
+
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith('Failed to read the image file');
       expect(mockOnImageUpload).not.toHaveBeenCalled();
@@ -88,16 +88,17 @@ describe('ImageUpload', () => {
 
   it('should handle drag and drop', async () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
-    const dropZone = screen.getByText('Drag and drop or click to select').parentElement?.parentElement;
+
+    const dropZone = screen.getByText('Drag and drop or click to select').parentElement
+      ?.parentElement;
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
-    
+
     fireEvent.drop(dropZone!, {
       dataTransfer: {
         files: [file],
       },
     });
-    
+
     await waitFor(() => {
       expect(mockImageUtils.isValidImageFile).toHaveBeenCalledWith(file);
       expect(mockImageUtils.convertFileToDataURL).toHaveBeenCalledWith(file);
@@ -107,14 +108,14 @@ describe('ImageUpload', () => {
 
   it('should handle drag over and drag leave events', () => {
     render(<ImageUpload onImageUpload={mockOnImageUpload} />);
-    
+
     const dropZone = screen.getByRole('button', { name: /upload ingredient photo/i });
-    
+
     fireEvent.dragOver(dropZone);
     // Check the Card parent element for drag over styles
     const cardElement = dropZone.closest('[data-testid="upload-area"]');
     expect(cardElement).toHaveClass('border-blue-500');
-    
+
     fireEvent.dragLeave(dropZone);
     expect(cardElement).not.toHaveClass('border-blue-500');
   });

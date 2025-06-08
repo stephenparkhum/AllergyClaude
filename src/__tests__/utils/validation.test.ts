@@ -1,4 +1,8 @@
-import { validateAllergies, validateImageData, validateAnalysisRequest } from '@/lib/utils/validation';
+import {
+  validateAllergies,
+  validateImageData,
+  validateAnalysisRequest,
+} from '@/lib/utils/validation';
 
 describe('validation utilities', () => {
   describe('validateAllergies', () => {

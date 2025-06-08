@@ -29,7 +29,7 @@ describe('ThemeToggle', () => {
       systemTheme: 'light',
       resolvedTheme: 'light',
     });
-    
+
     // Default to not mounted
     (React.useState as jest.Mock).mockReturnValue([false, mockSetMounted]);
     (React.useEffect as jest.Mock).mockImplementation((fn: () => void) => fn());
@@ -44,7 +44,7 @@ describe('ThemeToggle', () => {
   it('should show moon icon for light theme after mounting', () => {
     // Mock mounted state
     (React.useState as jest.Mock).mockReturnValue([true, mockSetMounted]);
-    
+
     render(<ThemeToggle />);
     const button = screen.getByTestId('theme-toggle');
     expect(button).not.toBeDisabled();
@@ -71,7 +71,7 @@ describe('ThemeToggle', () => {
   it('should toggle theme when clicked', () => {
     // Mock mounted state
     (React.useState as jest.Mock).mockReturnValue([true, mockSetMounted]);
-    
+
     render(<ThemeToggle />);
     const button = screen.getByTestId('theme-toggle');
     fireEvent.click(button);

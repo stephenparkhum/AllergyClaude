@@ -34,7 +34,15 @@ Please be thorough in checking for hidden allergens and cross-contamination warn
 export function createSystemMessage(userAllergies: string): string {
   return `You are an expert food safety analyst. The user has the following allergies: ${userAllergies}. 
 
-Analyze ingredient labels thoroughly, checking for:
+Analyze food labels and packages thoroughly, including:
+
+PRODUCT IDENTIFICATION:
+- Look for the food product name (what the food actually is)
+- Look for the brand name or manufacturer name
+- If the brand or product name is not clearly visible or readable, use "Unknown Brand" or "Unknown Product"
+- Only include what is actually visible in the image - do not guess or infer
+
+ALLERGEN ANALYSIS:
 - Direct allergen ingredients
 - Alternative names for allergens
 - "May contain" warnings
