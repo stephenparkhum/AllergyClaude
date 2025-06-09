@@ -172,10 +172,3 @@ h6 {
   }
 }
 
-/* Safe area insets for devices with notches */
-@supports (padding: max(0px)) {
-  body {
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
-  }
-}
