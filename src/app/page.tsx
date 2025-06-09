@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   CircularProgress,
   Tabs,
@@ -16,7 +16,7 @@ import { Shield, CheckCircle, AlertTriangle } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import SetupAnalysis from '@/components/SetupAnalysis';
-import { saveToLocalStorage, getFromLocalStorage } from '@/lib/utils/storage';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { validateAnalysisRequest } from '@/lib/utils/validation';
 
 // TabPanel component for the results tabs
@@ -41,7 +41,7 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 }
 
 export default function Home() {
-  const [allergies, setAllergies] = useState<string>('');
+  const [allergies, setAllergies] = useLocalStorage('userAllergies', '');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const theme = useTheme();
@@ -59,23 +59,8 @@ export default function Home() {
     analysis: string;
   } | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
-  // Handle mounting and localStorage
-  useEffect(() => {
-    setMounted(true);
-    const savedAllergies = getFromLocalStorage('userAllergies');
-    if (savedAllergies) {
-      setAllergies(savedAllergies);
-    }
-  }, []);
-
-  // Save allergies to localStorage when they change (only after mounted)
-  useEffect(() => {
-    if (mounted && allergies.trim()) {
-      saveToLocalStorage('userAllergies', allergies);
-    }
-  }, [allergies, mounted]);
+  // allergies are now automatically synced with localStorage via useLocalStorage hook
 
   const handleImageUpload = (imageData: string) => {
     setUploadedImage(imageData);

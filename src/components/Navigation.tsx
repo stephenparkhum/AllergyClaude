@@ -95,6 +95,28 @@ export default function Navigation() {
               </div>
               
               <div className="flex items-center gap-3">
+                <Link href="/landing">
+                  <Button
+                    variant="text"
+                    data-testid="landing-nav-button"
+                    aria-label="Go to landing page"
+                    sx={{
+                      color: 'var(--foreground)',
+                      borderRadius: 'calc(var(--radius) - 2px)',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      px: 3,
+                      py: 1,
+                      '&:hover': {
+                        backgroundColor: 'var(--accent-soft)',
+                        color: 'var(--accent)',
+                      },
+                    }}
+                  >
+                    Home
+                  </Button>
+                </Link>
+                
                 {isHomePage ? (
                   <Link href="/how-to">
                     <Button
@@ -137,7 +159,7 @@ export default function Navigation() {
                         },
                       }}
                     >
-                      Dashboard
+                      Analyzer
                     </Button>
                   </Link>
                 )}
@@ -186,6 +208,32 @@ export default function Navigation() {
             
             <ListItem sx={{ px: 0, py: 2 }}>
               <div className="w-full">
+                <Link href="/landing" className="w-full block" onClick={() => setMobileMenuOpen(false)}>
+                  <Button
+                    variant="text"
+                    fullWidth
+                    size="large"
+                    data-testid="mobile-landing-button"
+                    sx={{
+                      color: 'var(--foreground)',
+                      justifyContent: 'flex-start',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      py: 1.5,
+                      '&:hover': {
+                        backgroundColor: 'var(--accent-soft)',
+                        color: 'var(--accent)',
+                      },
+                    }}
+                  >
+                    Home
+                  </Button>
+                </Link>
+              </div>
+            </ListItem>
+            
+            <ListItem sx={{ px: 0, py: 2 }}>
+              <div className="w-full">
                 {isHomePage ? (
                   <Link href="/how-to" className="w-full block" onClick={() => setMobileMenuOpen(false)}>
                     <Button
@@ -228,7 +276,7 @@ export default function Navigation() {
                         },
                       }}
                     >
-                      Back to Dashboard
+                      Analyzer
                     </Button>
                   </Link>
                 )}

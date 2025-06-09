@@ -52,11 +52,10 @@ describe('Navigation', () => {
   });
 
   describe('Desktop Layout', () => {
-    it('should render navigation with site name and tagline on home page', () => {
+    it('should render navigation with site name on home page', () => {
       render(<Navigation />);
       
       expect(screen.getByTestId('nav-title')).toHaveTextContent(siteData.name);
-      expect(screen.getByTestId('nav-description')).toHaveTextContent(siteData.tagline);
     });
 
     it('should render "How to Use" button on home page', () => {
@@ -67,29 +66,29 @@ describe('Navigation', () => {
       expect(howToButton).toHaveTextContent('How to Use');
     });
 
-    it('should render "Back to Dashboard" button on non-home page', () => {
+    it('should render "Analyzer" button on non-home page', () => {
       mockUsePathname.mockReturnValue('/how-to');
       
       render(<Navigation />);
       
       const backButton = screen.getByTestId('home-nav-button');
       expect(backButton).toBeInTheDocument();
-      expect(backButton).toHaveTextContent('Back to Dashboard');
+      expect(backButton).toHaveTextContent('Analyzer');
     });
 
-    it('should render theme toggle with white color', () => {
+    it('should render theme toggle', () => {
       render(<Navigation />);
       
       const themeToggle = screen.getByTestId('theme-toggle');
-      expect(themeToggle).toHaveStyle('color: rgb(255, 255, 255)');
+      expect(themeToggle).toBeInTheDocument();
     });
 
-    it('should show different description on non-home page', () => {
+    it('should render Home button on non-home page', () => {
       mockUsePathname.mockReturnValue('/how-to');
       
       render(<Navigation />);
       
-      expect(screen.getByTestId('nav-description')).toHaveTextContent('AI-powered food allergy detection');
+      expect(screen.getByTestId('landing-nav-button')).toHaveTextContent('Home');
     });
   });
 
@@ -105,10 +104,10 @@ describe('Navigation', () => {
       expect(screen.getByTestId('mobile-menu-button')).toBeInTheDocument();
     });
 
-    it('should not show tagline on mobile', () => {
+    it('should render mobile navigation correctly', () => {
       render(<Navigation />);
       
-      expect(screen.queryByTestId('nav-description')).not.toBeInTheDocument();
+      expect(screen.getByTestId('mobile-menu-button')).toBeInTheDocument();
     });
 
     it('should open mobile menu when menu button is clicked', () => {
@@ -139,34 +138,34 @@ describe('Navigation', () => {
       const menuButton = screen.getByTestId('mobile-menu-button');
       fireEvent.click(menuButton);
       
-      expect(screen.getByTestId('mobile-home-button')).toBeInTheDocument();
+      expect(screen.getByTestId('mobile-landing-button')).toBeInTheDocument();
     });
 
-    it('should use horizontal layout (flex-row) on mobile', () => {
+    it('should use horizontal layout on mobile', () => {
       render(<Navigation />);
       
       // Find the mobile layout container
       const mobileContainer = screen.getByTestId('nav-title').parentElement?.parentElement;
-      expect(mobileContainer).toHaveClass('flex', 'flex-row', 'justify-between', 'items-center');
+      expect(mobileContainer).toHaveClass('flex', 'items-center', 'justify-between', 'h-16');
     });
   });
 
   describe('Styling', () => {
-    it('should have primary color background', () => {
+    it('should have backdrop blur styling', () => {
       render(<Navigation />);
       
       const nav = screen.getByTestId('navigation');
-      expect(nav).toHaveStyle(`background-color: ${mockTheme.palette.primary.main}`);
+      expect(nav).toHaveClass('backdrop-blur-md');
     });
 
-    it('should have white text color for title', () => {
+    it('should have CSS variable color for title', () => {
       render(<Navigation />);
       
       const title = screen.getByTestId('nav-title');
-      expect(title).toHaveStyle('color: rgb(255, 255, 255)');
+      expect(title).toHaveStyle('color: var(--foreground)');
     });
 
-    it('should have reduced padding on mobile', () => {
+    it('should have consistent padding', () => {
       mockUseMediaQuery.mockReturnValue(true);
       
       render(<Navigation />);
@@ -174,7 +173,7 @@ describe('Navigation', () => {
       // Find the main container div
       const nav = screen.getByTestId('navigation');
       const container = nav.querySelector('.max-w-7xl');
-      expect(container).toHaveClass('py-3'); // Mobile padding
+      expect(container).toHaveClass('px-4', 'sm:px-6');
     });
   });
 

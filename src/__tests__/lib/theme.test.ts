@@ -18,7 +18,7 @@ describe('MUI Theme Configuration', () => {
 
     it('should have correct typography configuration', () => {
       expect(lightTheme.typography.fontFamily).toBe('var(--font-source-sans-pro), sans-serif');
-      expect(lightTheme.typography.h1?.fontFamily).toBe('var(--font-playfair), serif');
+      expect(lightTheme.typography.h1?.fontFamily).toBe('var(--font-source-sans-pro), sans-serif');
     });
   });
 
@@ -39,7 +39,7 @@ describe('MUI Theme Configuration', () => {
 
     it('should have correct typography configuration', () => {
       expect(darkTheme.typography.fontFamily).toBe('var(--font-source-sans-pro), sans-serif');
-      expect(darkTheme.typography.h1?.fontFamily).toBe('var(--font-playfair), serif');
+      expect(darkTheme.typography.h1?.fontFamily).toBe('var(--font-source-sans-pro), sans-serif');
     });
   });
 

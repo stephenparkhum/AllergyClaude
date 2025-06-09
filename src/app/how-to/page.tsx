@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { CheckCircle, XCircle, AlertTriangle, Camera, FileImage, Eye, Shield } from 'lucide-react';
 import Link from 'next/link';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { siteData } from '@/lib/siteData';
+import { howToData } from '@/lib/howToData';
 
 export default function HowToPage() {
   return (
@@ -15,21 +15,25 @@ export default function HowToPage() {
       <main className="max-w-5xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1
+          <Typography
+            variant="h1"
             className="text-2xl md:text-3xl font-semibold mb-4"
             style={{ color: 'var(--foreground)' }}
             data-testid="how-to-title"
           >
-            How to Use <span style={{ color: 'var(--secondary)' }}>Allergy Agents</span>
-          </h1>
-          <p
+            {howToData.pageTitle.split(' ').slice(0, 3).join(' ')}{' '}
+            <span style={{ color: 'var(--secondary)' }}>
+              {howToData.pageTitle.split(' ').slice(3).join(' ')}
+            </span>
+          </Typography>
+          <Typography
+            variant="body1"
             className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
             style={{ color: 'var(--muted)' }}
             data-testid="how-to-subtitle"
           >
-            Learn how to quickly and safely analyze food ingredients for allergens using our
-            AI-powered tool.
-          </p>
+            {howToData.pageSubtitle}
+          </Typography>
         </div>
 
         {/* Important Notice */}
@@ -44,145 +48,144 @@ export default function HowToPage() {
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 mt-0.5" style={{ color: '#ff9800' }} />
             <div>
-              <h3 className="font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                Important Safety Notice
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                This tool is designed to assist with ingredient analysis but should NEVER be your
-                only method of checking food safety. Always read ingredient labels carefully
-                yourself and consult healthcare providers for medical advice.
-              </p>
+              <Typography
+                variant="h3"
+                className="font-semibold mb-2"
+                style={{ color: 'var(--foreground)' }}
+              >
+                {howToData.safetyNotice.title}
+              </Typography>
+              <Typography
+                variant="body2"
+                className="text-sm leading-relaxed"
+                style={{ color: 'var(--muted)' }}
+              >
+                {howToData.safetyNotice.description}
+              </Typography>
             </div>
           </div>
         </div>
 
         {/* Step-by-Step Guide */}
         <div className="minimal-card p-8 mb-12" data-testid="step-guide-card">
-          <h2 className="text-2xl font-semibold mb-8" style={{ color: 'var(--foreground)' }}>
+          <Typography
+            variant="h2"
+            className="text-2xl font-semibold mb-8"
+            style={{ color: 'var(--foreground)' }}
+          >
             Step-by-Step Guide
-          </h2>
+          </Typography>
 
           <div className="space-y-12">
-            {/* Step 1 */}
-            <div className="flex gap-4 md:gap-6" data-testid="step-1">
-              <div
-                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
-              >
-                <span className="text-lg md:text-xl font-semibold">1</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                  List Your Allergies
-                </h3>
-                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  Enter all your known allergies in the text area. Be specific and include all forms
-                  (e.g., "milk, dairy, lactose").
-                </p>
+            {howToData.steps.map((step, _index) => (
+              <div key={step.id} className="flex gap-4 md:gap-6" data-testid={`step-${step.id}`}>
                 <div
-                  className="rounded-lg p-4"
+                  className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
                   style={{
-                    backgroundColor: 'var(--background)',
-                    border: '1px solid var(--border)',
+                    backgroundColor: step.id === 2 ? 'var(--secondary)' : 'var(--accent)',
+                    color: 'white',
                   }}
                 >
-                  <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                    <strong>Example:</strong> "peanuts, tree nuts, shellfish, dairy, eggs, soy"
-                  </p>
+                  <span className="text-lg md:text-xl font-semibold">{step.id}</span>
                 </div>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex gap-4 md:gap-6" data-testid="step-2">
-              <div
-                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--secondary)', color: 'white' }}
-              >
-                <span className="text-lg md:text-xl font-semibold">2</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                  Take a Clear Photo
-                </h3>
-                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  Photograph the ingredient list on the food package. Ensure the text is clear and
-                  readable.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div
-                    className="rounded-lg p-4"
-                    style={{
-                      backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                      border: '1px solid rgba(76, 175, 80, 0.3)',
-                    }}
+                <div className="flex-1">
+                  <Typography
+                    variant="h3"
+                    className="text-xl font-semibold mb-3"
+                    style={{ color: 'var(--foreground)' }}
                   >
-                    <div className="flex items-center gap-2 mb-3">
-                      <CheckCircle className="h-5 w-5" style={{ color: '#4caf50' }} />
-                      <span className="font-semibold" style={{ color: '#2e7d32' }}>
-                        Good Photos
-                      </span>
-                    </div>
-                    <ul className="text-sm space-y-1" style={{ color: '#388e3c' }}>
-                      <li>• Clear, focused ingredient list</li>
-                      <li>• Good lighting</li>
-                      <li>• Text is readable</li>
-                      <li>• Full ingredients panel visible</li>
-                    </ul>
-                  </div>
-                  <div
-                    className="rounded-lg p-4"
-                    style={{
-                      backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                      border: '1px solid rgba(244, 67, 54, 0.3)',
-                    }}
+                    {step.title}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    className="mb-4 leading-relaxed"
+                    style={{ color: 'var(--muted)' }}
                   >
-                    <div className="flex items-center gap-2 mb-3">
-                      <XCircle className="h-5 w-5" style={{ color: '#f44336' }} />
-                      <span className="font-semibold" style={{ color: '#c62828' }}>
-                        Avoid
-                      </span>
+                    {step.description}
+                  </Typography>
+                  {step.example && (
+                    <div
+                      className="rounded-lg p-4"
+                      style={{
+                        backgroundColor: 'var(--background)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        <strong>Example:</strong> "{step.example}"
+                      </Typography>
                     </div>
-                    <ul className="text-sm space-y-1" style={{ color: '#d32f2f' }}>
-                      <li>• Blurry or out-of-focus images</li>
-                      <li>• Poor lighting/shadows</li>
-                      <li>• Partial ingredient lists</li>
-                      <li>• Reflective surfaces/glare</li>
-                    </ul>
-                  </div>
+                  )}
+                  {step.id === 2 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {howToData.photoTips.map((tipCategory, tipIndex) => (
+                        <div
+                          key={tipIndex}
+                          className="rounded-lg p-4"
+                          style={{
+                            backgroundColor:
+                              tipCategory.type === 'good'
+                                ? 'rgba(76, 175, 80, 0.1)'
+                                : 'rgba(244, 67, 54, 0.1)',
+                            border:
+                              tipCategory.type === 'good'
+                                ? '1px solid rgba(76, 175, 80, 0.3)'
+                                : '1px solid rgba(244, 67, 54, 0.3)',
+                          }}
+                        >
+                          <div className="flex items-center gap-2 mb-3">
+                            {tipCategory.type === 'good' ? (
+                              <CheckCircle className="h-5 w-5" style={{ color: '#4caf50' }} />
+                            ) : (
+                              <XCircle className="h-5 w-5" style={{ color: '#f44336' }} />
+                            )}
+                            <span
+                              className="font-semibold"
+                              style={{
+                                color: tipCategory.type === 'good' ? '#2e7d32' : '#c62828',
+                              }}
+                            >
+                              {tipCategory.title}
+                            </span>
+                          </div>
+                          <ul
+                            className="text-sm space-y-1"
+                            style={{
+                              color: tipCategory.type === 'good' ? '#388e3c' : '#d32f2f',
+                            }}
+                          >
+                            {tipCategory.items.map((item, itemIndex) => (
+                              <li key={itemIndex}>• {item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {step.details && (
+                    <div
+                      className="rounded-lg p-4"
+                      style={{
+                        backgroundColor: 'var(--background)',
+                        border: '1px solid var(--border)',
+                      }}
+                    >
+                      <Typography
+                        variant="body2"
+                        className="text-sm"
+                        style={{ color: 'var(--muted)' }}
+                      >
+                        {step.details}
+                      </Typography>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex gap-4 md:gap-6" data-testid="step-3">
-              <div
-                className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
-              >
-                <span className="text-lg md:text-xl font-semibold">3</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                  Upload and Analyze
-                </h3>
-                <p className="mb-4 leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  Upload your photo and click "Analyze" to get instant allergy detection results.
-                </p>
-                <div
-                  className="rounded-lg p-4"
-                  style={{
-                    backgroundColor: 'var(--background)',
-                    border: '1px solid var(--border)',
-                  }}
-                >
-                  <p className="text-sm" style={{ color: 'var(--muted)' }}>
-                    The AI will scan the ingredients and cross-reference them with your allergies,
-                    including hidden allergens and "may contain" warnings.
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -190,38 +193,17 @@ export default function HowToPage() {
         <div className="minimal-card p-8 mb-12" data-testid="good-use-cases-card">
           <div className="flex items-center gap-3 mb-8">
             <CheckCircle className="h-6 w-6" style={{ color: '#4caf50' }} />
-            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+            <Typography
+              variant="h2"
+              className="text-2xl font-semibold"
+              style={{ color: 'var(--foreground)' }}
+            >
               Recommended Use Cases
-            </h2>
+            </Typography>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Packaged Foods',
-                desc: 'Snacks, cereals, canned goods, frozen meals with clear ingredient labels',
-              },
-              {
-                title: 'Ingredient Verification',
-                desc: 'Double-checking ingredient lists for hidden allergens or alternative names',
-              },
-              {
-                title: 'New Products',
-                desc: "Trying new foods or brands when you're unsure about their safety",
-              },
-              {
-                title: 'Travel & Shopping',
-                desc: 'Quick checks while grocery shopping or when traveling abroad',
-              },
-              {
-                title: 'Education',
-                desc: 'Learning about hidden allergens and alternative ingredient names',
-              },
-              {
-                title: 'Family Safety',
-                desc: 'Helping family members or caregivers check food safety',
-              },
-            ].map((item, index) => (
+            {howToData.goodUseCases.map((item, index) => (
               <div
                 key={index}
                 className="rounded-lg p-4"
@@ -230,12 +212,16 @@ export default function HowToPage() {
                   border: '1px solid rgba(76, 175, 80, 0.2)',
                 }}
               >
-                <h3 className="font-semibold mb-2" style={{ color: '#2e7d32' }}>
+                <Typography
+                  variant="h3"
+                  className="font-semibold mb-2"
+                  style={{ color: '#2e7d32' }}
+                >
                   ✓ {item.title}
-                </h3>
-                <p className="text-sm" style={{ color: '#388e3c' }}>
-                  {item.desc}
-                </p>
+                </Typography>
+                <Typography variant="body2" className="text-sm" style={{ color: '#388e3c' }}>
+                  {item.description}
+                </Typography>
               </div>
             ))}
           </div>
@@ -245,38 +231,17 @@ export default function HowToPage() {
         <div className="minimal-card p-8 mb-12" data-testid="avoid-use-cases-card">
           <div className="flex items-center gap-3 mb-8">
             <AlertTriangle className="h-6 w-6" style={{ color: '#f44336' }} />
-            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+            <Typography
+              variant="h2"
+              className="text-2xl font-semibold"
+              style={{ color: 'var(--foreground)' }}
+            >
               Important Limitations
-            </h2>
+            </Typography>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'Emergency Situations',
-                desc: 'Never rely solely on this app during allergic reactions. Seek immediate medical help.',
-              },
-              {
-                title: 'Restaurant Meals',
-                desc: 'Cannot analyze prepared foods, restaurant dishes, or foods without ingredient labels',
-              },
-              {
-                title: 'Severe Allergies',
-                desc: 'Always verify ingredients manually if you have life-threatening allergies',
-              },
-              {
-                title: 'Cross-Contamination',
-                desc: "Cannot detect facility cross-contamination beyond what's listed on labels",
-              },
-              {
-                title: 'Unclear Images',
-                desc: 'Results may be inaccurate with blurry, partial, or poor-quality images',
-              },
-              {
-                title: 'Sole Decision Making',
-                desc: 'Always double-check results and consult healthcare providers for medical advice',
-              },
-            ].map((item, index) => (
+            {howToData.limitations.map((item, index) => (
               <div
                 key={index}
                 className="rounded-lg p-4"
@@ -285,12 +250,16 @@ export default function HowToPage() {
                   border: '1px solid rgba(244, 67, 54, 0.2)',
                 }}
               >
-                <h3 className="font-semibold mb-2" style={{ color: '#c62828' }}>
+                <Typography
+                  variant="h3"
+                  className="font-semibold mb-2"
+                  style={{ color: '#c62828' }}
+                >
                   ⚠️ {item.title}
-                </h3>
-                <p className="text-sm" style={{ color: '#d32f2f' }}>
-                  {item.desc}
-                </p>
+                </Typography>
+                <Typography variant="body2" className="text-sm" style={{ color: '#d32f2f' }}>
+                  {item.description}
+                </Typography>
               </div>
             ))}
           </div>
@@ -300,53 +269,61 @@ export default function HowToPage() {
         <div className="minimal-card p-8 mb-12" data-testid="tips-card">
           <div className="flex items-center gap-3 mb-8">
             <Shield className="h-6 w-6" style={{ color: 'var(--accent)' }} />
-            <h2 className="text-2xl font-semibold" style={{ color: 'var(--foreground)' }}>
+            <Typography
+              variant="h2"
+              className="text-2xl font-semibold"
+              style={{ color: 'var(--foreground)' }}
+            >
               Tips for Best Results
-            </h2>
+            </Typography>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <Camera className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
-              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                Photo Quality
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Use good lighting and ensure ingredients text is clear and in focus
-              </p>
-            </div>
-
-            <div className="text-center">
-              <FileImage className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
-              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                Complete Labels
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Capture the entire ingredient list including "may contain" warnings
-              </p>
-            </div>
-
-            <div className="text-center">
-              <Eye className="h-12 w-12 mx-auto mb-4" style={{ color: 'var(--accent)' }} />
-              <h3 className="font-semibold mb-3" style={{ color: 'var(--foreground)' }}>
-                Verify Results
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                Always double-check the analysis with your own reading of the label
-              </p>
-            </div>
+            {howToData.tips.map((tip, index) => {
+              const IconComponent =
+                tip.icon === 'Camera' ? Camera : tip.icon === 'FileImage' ? FileImage : Eye;
+              return (
+                <div key={index} className="text-center">
+                  <IconComponent
+                    className="h-12 w-12 mx-auto mb-4"
+                    style={{ color: 'var(--accent)' }}
+                  />
+                  <Typography
+                    variant="h3"
+                    className="font-semibold mb-3"
+                    style={{ color: 'var(--foreground)' }}
+                  >
+                    {tip.title}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    className="text-sm leading-relaxed"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {tip.description}
+                  </Typography>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Call to Action */}
         <div className="minimal-card p-8 text-center" data-testid="cta-card">
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--foreground)' }}>
-            Ready to Get Started?
-          </h2>
-          <p className="mb-6 max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--muted)' }}>
-            Now that you know how to use {siteData.name} safely and effectively, head back to the
-            main page to start analyzing your food for allergens.
-          </p>
+          <Typography
+            variant="h2"
+            className="text-2xl font-semibold mb-4"
+            style={{ color: 'var(--foreground)' }}
+          >
+            {howToData.callToAction.title}
+          </Typography>
+          <Typography
+            variant="body1"
+            className="mb-6 max-w-2xl mx-auto leading-relaxed"
+            style={{ color: 'var(--muted)' }}
+          >
+            {howToData.callToAction.description}
+          </Typography>
           <Link href="/">
             <Button
               variant="contained"
@@ -368,7 +345,7 @@ export default function HowToPage() {
                 },
               }}
             >
-              Start Analyzing Food
+              {howToData.callToAction.buttonText}
             </Button>
           </Link>
         </div>
