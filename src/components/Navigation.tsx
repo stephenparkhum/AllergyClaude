@@ -29,84 +29,89 @@ export default function Navigation() {
   return (
     <>
       <nav
-        className="border-b border-opacity-10 mb-8"
+        className="sticky top-0 z-50 backdrop-blur-md"
         style={{ 
-          backgroundColor: theme.palette.primary.main,
-          borderColor: 'rgba(255, 255, 255, 0.2)'
+          backgroundColor: 'var(--surface)',
+          borderBottom: '1px solid var(--border)',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
         }}
         data-testid="navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {isMobile ? (
             // Mobile Layout
-            <div className="flex flex-row justify-between items-center">
-              <Link href="/" className="flex-1">
+            <div className="flex items-center justify-between h-16">
+              <Link href="/" className="flex items-center">
                 <h1
-                  className="text-xl font-semibold tracking-tight"
+                  className="text-lg font-medium tracking-tight"
                   data-testid="nav-title"
                   style={{
-                    color: 'white',
+                    color: 'var(--foreground)',
                     transition: 'color 0.2s ease',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'white')}
                 >
-                  {siteData.name}
+                  Allergy <span style={{ color: 'var(--secondary)' }}>Agents</span>
                 </h1>
               </Link>
               <IconButton
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Open menu"
                 data-testid="mobile-menu-button"
-                sx={{ color: 'white' }}
+                sx={{ 
+                  color: 'var(--foreground)',
+                  '&:hover': {
+                    backgroundColor: 'var(--accent-soft)',
+                  }
+                }}
               >
                 <MenuIcon />
               </IconButton>
             </div>
           ) : (
             // Desktop Layout
-            <div className="flex justify-between items-center">
-              <div>
-                <Link href="/" className="block">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center">
+                <Link href="/" className="flex items-center">
                   <h1
-                    className="text-3xl font-semibold tracking-tight"
+                    className="text-xl font-medium tracking-tight mr-8"
                     data-testid="nav-title"
                     style={{
-                      color: 'white',
+                      color: 'var(--foreground)',
                       transition: 'color 0.2s ease',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)')}
-                    onMouseLeave={e => (e.currentTarget.style.color = 'white')}
                   >
-                    {siteData.name}
+                    Allergy <span style={{ color: 'var(--secondary)' }}>Agents</span>
                   </h1>
                 </Link>
-                <p
-                  className="text-sm mt-1"
-                  data-testid="nav-description"
-                  style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-                >
-                  {isHomePage ? siteData.tagline : 'AI-powered food allergy detection'}
-                </p>
+                {isHomePage && (
+                  <p
+                    className="text-sm hidden lg:block"
+                    data-testid="nav-description"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {siteData.tagline}
+                  </p>
+                )}
               </div>
-              <div className="flex items-center gap-4">
+              
+              <div className="flex items-center gap-3">
                 {isHomePage ? (
                   <Link href="/how-to">
                     <Button
-                      variant="outlined"
+                      variant="text"
                       startIcon={<HelpCircle className="h-4 w-4" />}
                       data-testid="how-to-nav-button"
                       aria-label="Learn how to use Allergy Agents"
                       sx={{
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                        color: 'white',
+                        color: 'var(--foreground)',
                         borderRadius: 'calc(var(--radius) - 2px)',
                         textTransform: 'none',
                         fontWeight: 500,
+                        px: 3,
+                        py: 1,
                         '&:hover': {
-                          borderColor: 'white',
-                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                          color: 'white',
+                          backgroundColor: 'var(--accent-soft)',
+                          color: 'var(--accent)',
                         },
                       }}
                     >
@@ -116,28 +121,29 @@ export default function Navigation() {
                 ) : (
                   <Link href="/">
                     <Button
-                      variant="outlined"
+                      variant="text"
                       data-testid="home-nav-button"
                       aria-label="Go back to main dashboard"
                       sx={{
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                        color: 'white',
+                        color: 'var(--foreground)',
                         borderRadius: 'calc(var(--radius) - 2px)',
                         textTransform: 'none',
                         fontWeight: 500,
+                        px: 3,
+                        py: 1,
                         '&:hover': {
-                          borderColor: 'white',
-                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                          color: 'white',
+                          backgroundColor: 'var(--accent-soft)',
+                          color: 'var(--accent)',
                         },
                       }}
                     >
-                      Back to Dashboard
+                      Dashboard
                     </Button>
                   </Link>
                 )}
+                <div className="h-6 w-px mx-1" style={{ backgroundColor: 'var(--border)' }} />
                 <NoSSR fallback={<div className="w-10 h-10" />}>
-                  <ThemeToggle iconColor="white" />
+                  <ThemeToggle />
                 </NoSSR>
               </div>
             </div>
@@ -151,42 +157,82 @@ export default function Navigation() {
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         data-testid="mobile-menu-drawer"
+        PaperProps={{
+          sx: {
+            backgroundColor: 'var(--surface)',
+            color: 'var(--foreground)',
+          }
+        }}
       >
-        <div className="w-72 p-6">
-          <List>
-            <ListItem sx={{ py: 2 }}>
+        <div className="w-80 p-6">
+          <div className="mb-6">
+            <h2 className="text-lg font-medium mb-2" style={{ color: 'var(--foreground)' }}>
+              Menu
+            </h2>
+          </div>
+          
+          <List sx={{ p: 0 }}>
+            <ListItem sx={{ px: 0, py: 2 }}>
               <div className="flex items-center justify-between w-full">
-                <ListItemText primary="Theme" />
+                <ListItemText 
+                  primary="Theme" 
+                  sx={{ '& .MuiListItemText-primary': { color: 'var(--foreground)' } }}
+                />
                 <NoSSR fallback={<div className="w-10 h-10" />}>
                   <ThemeToggle />
                 </NoSSR>
               </div>
             </ListItem>
-            <ListItem sx={{ py: 2 }}>
-              {isHomePage ? (
-                <Link href="/how-to" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  <Button
-                    variant="outlined"
-                    startIcon={<HelpCircle className="h-4 w-4" />}
-                    className="font-source-sans-pro w-full"
-                    size="large"
-                    data-testid="mobile-how-to-button"
-                  >
-                    How to Use
-                  </Button>
-                </Link>
-              ) : (
-                <Link href="/" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  <Button
-                    variant="outlined"
-                    className="font-source-sans-pro w-full"
-                    size="large"
-                    data-testid="mobile-home-button"
-                  >
-                    Back to Dashboard
-                  </Button>
-                </Link>
-              )}
+            
+            <ListItem sx={{ px: 0, py: 2 }}>
+              <div className="w-full">
+                {isHomePage ? (
+                  <Link href="/how-to" className="w-full block" onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="text"
+                      startIcon={<HelpCircle className="h-4 w-4" />}
+                      fullWidth
+                      size="large"
+                      data-testid="mobile-how-to-button"
+                      sx={{
+                        color: 'var(--foreground)',
+                        justifyContent: 'flex-start',
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        py: 1.5,
+                        '&:hover': {
+                          backgroundColor: 'var(--accent-soft)',
+                          color: 'var(--accent)',
+                        },
+                      }}
+                    >
+                      How to Use
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/" className="w-full block" onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="text"
+                      fullWidth
+                      size="large"
+                      data-testid="mobile-home-button"
+                      sx={{
+                        color: 'var(--foreground)',
+                        justifyContent: 'flex-start',
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        py: 1.5,
+                        '&:hover': {
+                          backgroundColor: 'var(--accent-soft)',
+                          color: 'var(--accent)',
+                        },
+                      }}
+                    >
+                      Back to Dashboard
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </ListItem>
           </List>
         </div>

@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Button,
-  TextField,
   CircularProgress,
   Tabs,
   Tab,
@@ -14,11 +12,10 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Shield, CheckCircle, AlertTriangle, RefreshCw } from 'lucide-react';
-import Image from 'next/image';
-import ImageUpload from '@/components/ImageUpload';
+import { Shield, CheckCircle, AlertTriangle } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import SetupAnalysis from '@/components/SetupAnalysis';
 import { saveToLocalStorage, getFromLocalStorage } from '@/lib/utils/storage';
 import { validateAnalysisRequest } from '@/lib/utils/validation';
 
@@ -130,98 +127,20 @@ export default function Home() {
           // Mobile Layout - Single Column
           <div className="space-y-6">
             {/* Mobile Input Section */}
-            <Card className="p-6" data-testid="input-card" elevation={2}>
-              <Typography variant="h5" className="mb-4 font-semibold" style={{ color: 'var(--foreground)' }}>
-                Setup Analysis
-              </Typography>
-
-              {/* Allergies Input */}
-              <div className="mb-8">
-                <TextField
-                  label="Known allergies"
-                  placeholder="peanuts, shellfish, dairy..."
-                  value={allergies}
-                  onChange={e => setAllergies(e.target.value)}
-                  multiline
-                  rows={3}
-                  fullWidth
-                  size="medium"
-                  variant="outlined"
-                  data-testid="allergies-input"
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: 'var(--surface)',
-                      '& fieldset': { borderColor: 'var(--border)' },
-                      '&:hover fieldset': { borderColor: 'var(--accent)' },
-                      '&.Mui-focused fieldset': { borderColor: 'var(--accent)' },
-                    },
-                    '& .MuiInputLabel-root': { color: 'var(--muted)' },
-                    '& .MuiInputBase-input': { color: 'var(--foreground)' },
-                  }}
-                />
-              </div>
-
-              {/* Image Upload and Preview */}
-              <div className="mb-8">
-                <Typography
-                  variant="subtitle1"
-                  className="mb-3 font-medium"
-                  style={{ color: 'var(--foreground)' }}
-                >
-                  Food Label Photo
-                </Typography>
-                {uploadedImage ? (
-                  <div className="space-y-3">
-                    <div
-                      className="relative w-full h-40 rounded-lg overflow-hidden"
-                      style={{ backgroundColor: 'var(--background)' }}
-                    >
-                      <Image
-                        src={uploadedImage}
-                        alt="Uploaded photo"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <Button
-                      size="large"
-                      onClick={handleRemoveImage}
-                      startIcon={<RefreshCw className="h-4 w-4" />}
-                      fullWidth
-                      variant="outlined"
-                    >
-                      Upload Different Image
-                    </Button>
-                  </div>
-                ) : (
-                  <ImageUpload onImageUpload={handleImageUpload} />
-                )}
-              </div>
-
-              {/* Analyze Button */}
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={analyzeIngredients}
-                disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
-                fullWidth
-                size="large"
-                data-testid="analyze-button"
-                sx={{
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: '1.2rem',
-                  py: 2,
-                }}
-              >
-                {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}
-              </Button>
-            </Card>
+            <SetupAnalysis
+              allergies={allergies}
+              setAllergies={setAllergies}
+              uploadedImage={uploadedImage}
+              onImageUpload={handleImageUpload}
+              onRemoveImage={handleRemoveImage}
+              onAnalyze={analyzeIngredients}
+              isAnalyzing={isAnalyzing}
+            />
 
             {/* Results with Tabs */}
             <Card className="p-6" data-testid="results-card" elevation={2}>
               <Typography variant="h5" className="mb-4 font-semibold" style={{ color: 'var(--foreground)' }}>
-                Results
+                <span style={{ color: 'var(--secondary)' }}>Results</span>
               </Typography>
 
               {isAnalyzing ? (
@@ -408,110 +327,22 @@ export default function Home() {
           <div className="flex gap-6">
             {/* Sidebar - Fixed width */}
             <aside className="w-80 space-y-4">
-              <Card className="p-4 sticky top-4" data-testid="sidebar-card">
-                <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
-                  Setup Analysis
-                </Typography>
-
-                {/* Compact allergies input */}
-                <div className="mb-6">
-                  <TextField
-                    label="Known Allergies"
-                    placeholder="peanuts, dairy, gluten..."
-                    value={allergies}
-                    onChange={e => setAllergies(e.target.value)}
-                    size="small"
-                    fullWidth
-                    multiline
-                    rows={3}
-                    variant="outlined"
-                    data-testid="allergies-input"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'var(--surface)',
-                        '& fieldset': { borderColor: 'var(--border)' },
-                        '&:hover fieldset': { borderColor: 'var(--accent)' },
-                        '&.Mui-focused fieldset': { borderColor: 'var(--accent)' },
-                      },
-                      '& .MuiInputLabel-root': { color: 'var(--muted)' },
-                      '& .MuiInputBase-input': { color: 'var(--foreground)' },
-                    }}
-                  />
-                  <Typography
-                    variant="caption"
-                    style={{ color: 'var(--muted)' }}
-                    className="mt-1 block"
-                  >
-                    Separate with commas
-                  </Typography>
-                </div>
-
-                {/* Compact inline upload and preview */}
-                <div className="mb-6">
-                  <Typography
-                    variant="subtitle2"
-                    className="mb-2"
-                    style={{ color: 'var(--foreground)' }}
-                  >
-                    Food Label Photo
-                  </Typography>
-                  {uploadedImage ? (
-                    <div className="space-y-2">
-                      <div
-                        className="relative w-full h-40 rounded-lg overflow-hidden"
-                        style={{ backgroundColor: 'var(--background)' }}
-                      >
-                        <Image
-                          src={uploadedImage}
-                          alt="Uploaded photo"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <Button
-                        size="small"
-                        onClick={handleRemoveImage}
-                        startIcon={<RefreshCw className="h-4 w-4" />}
-                        fullWidth
-                        variant="outlined"
-                        sx={{
-                          borderColor: 'var(--border)',
-                          color: 'var(--foreground)',
-                          textTransform: 'none',
-                          '&:hover': { borderColor: 'var(--accent)', color: 'var(--accent)' },
-                        }}
-                      >
-                        Upload Different Image
-                      </Button>
-                    </div>
-                  ) : (
-                    <ImageUpload onImageUpload={handleImageUpload} />
-                  )}
-                </div>
-
-                {/* Analyze button */}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  onClick={analyzeIngredients}
-                  disabled={!uploadedImage || !allergies.trim() || isAnalyzing}
-                  data-testid="analyze-button"
-                  sx={{
-                    textTransform: 'none',
-                    fontWeight: 500,
-                  }}
-                >
-                  {isAnalyzing ? 'Analyzing...' : 'Analyze Ingredients'}
-                </Button>
-              </Card>
+              <SetupAnalysis
+                allergies={allergies}
+                setAllergies={setAllergies}
+                uploadedImage={uploadedImage}
+                onImageUpload={handleImageUpload}
+                onRemoveImage={handleRemoveImage}
+                onAnalyze={analyzeIngredients}
+                isAnalyzing={isAnalyzing}
+              />
             </aside>
 
             {/* Main content area */}
             <main className="flex-1">
               <Card className="p-4" data-testid="results-card">
                 <Typography variant="h6" className="mb-3" style={{ color: 'var(--foreground)' }}>
-                  Analysis Results
+                  Analysis <span style={{ color: 'var(--secondary)' }}>Results</span>
                 </Typography>
 
                 {isAnalyzing ? (

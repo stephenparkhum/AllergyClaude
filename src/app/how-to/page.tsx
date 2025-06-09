@@ -20,7 +20,7 @@ export default function HowToPage() {
             style={{ color: 'var(--foreground)' }}
             data-testid="how-to-title"
           >
-            How to Use {siteData.name}
+            How to Use <span style={{ color: 'var(--secondary)' }}>Allergy Agents</span>
           </h1>
           <p
             className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
@@ -97,7 +97,7 @@ export default function HowToPage() {
             <div className="flex gap-4 md:gap-6" data-testid="step-2">
               <div
                 className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--accent)', color: 'white' }}
+                style={{ backgroundColor: 'var(--secondary)', color: 'white' }}
               >
                 <span className="text-lg md:text-xl font-semibold">2</span>
               </div>
@@ -353,7 +353,7 @@ export default function HowToPage() {
               size="large"
               data-testid="start-analyzing-button"
               sx={{
-                backgroundColor: 'var(--accent)',
+                backgroundColor: 'var(--secondary)',
                 color: 'white',
                 borderRadius: 'calc(var(--radius) - 2px)',
                 fontWeight: 500,
@@ -362,7 +362,7 @@ export default function HowToPage() {
                 px: 4,
                 py: 1.5,
                 '&:hover': {
-                  backgroundColor: 'var(--accent)',
+                  backgroundColor: 'var(--secondary)',
                   opacity: 0.9,
                   boxShadow: 'none',
                 },

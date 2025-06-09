@@ -5,8 +5,10 @@
   --foreground: #1d1d1f;
   --surface: #ffffff;
   --border: #e5e5e7;
-  --muted: #86868b;
+  --muted: #6d6d70;
   --accent: #007aff;
+  --secondary: #5856d6;
+  --accent-soft: #007aff15;
   --radius: 12px;
 }
 
@@ -15,8 +17,10 @@
   --foreground: #1d1d1f;
   --surface: #ffffff;
   --border: #e5e5e7;
-  --muted: #86868b;
+  --muted: #6d6d70;
   --accent: #007aff;
+  --secondary: #5856d6;
+  --accent-soft: #007aff15;
 }
 
 .dark {
@@ -26,6 +30,8 @@
   --border: #2c2c2e;
   --muted: #98989d;
   --accent: #0a84ff;
+  --secondary: #8b87ff;
+  --accent-soft: #0a84ff15;
 }
 
 @theme inline {
@@ -48,6 +54,8 @@
     --border: #2c2c2e;
     --muted: #98989d;
     --accent: #0a84ff;
+    --secondary: #8b87ff;
+    --accent-soft: #0a84ff15;
   }
 }
 
